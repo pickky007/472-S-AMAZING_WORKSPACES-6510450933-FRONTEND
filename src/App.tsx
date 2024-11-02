@@ -1,17 +1,18 @@
-import React from "react";
 import "./App.css";
-import { UserProfilePage } from "./pages/UserProfilePage";
+import { LoginPage } from "./pages/LoginPage";
+import { RegisterPage } from "./pages/RegisterPage";
+import {BrowserRouter as Router, Routes, Route, Link} from 'react-router-dom';
+
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <h1>User Management System</h1>
-      </header>
-      <main className="App-content">
-        <UserProfilePage />
-      </main>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<LoginPage />}/>
+        <Route path="/register" element={<RegisterPage />}/>
+      </Routes>
+    </Router>
+
   );
 }
 export default App;
