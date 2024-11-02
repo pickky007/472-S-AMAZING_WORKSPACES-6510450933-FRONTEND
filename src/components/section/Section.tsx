@@ -1,3 +1,4 @@
+// src/components/section/Section.tsx
 import { ActivityCard } from "../activity/ActivityCard";
 import styles from "./Section.module.css";
 import IconButton from "@mui/material/IconButton";

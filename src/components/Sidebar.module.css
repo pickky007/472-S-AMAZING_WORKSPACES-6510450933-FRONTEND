@@ -1,0 +1,47 @@
+.sidebarContainer {
+  width: 250px;
+  height: 100vh;
+  background-color: #2d2d2d;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+}
+
+.workspaceHeader {
+  padding: 20px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.navList {
+  flex: 1;
+  padding: 8px 0;
+}
+
+.navItem {
+  padding: 8px 16px;
+  color: #ffffff;
+}
+
+.navItem:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+}
+
+.navItemIcon {
+  min-width: 40px;
+  color: #fff;
+}
+
+.navItemText {
+  font-size: 0.95rem;
+  font-weight: 400;
+}
+
+.subNavItem {
+  padding-left: 32px;
+}
+
+.logoutButton {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: auto;
+}

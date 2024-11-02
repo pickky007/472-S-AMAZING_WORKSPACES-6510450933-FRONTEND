@@ -1,3 +1,4 @@
+// src/components/activity/ActivityCard.tsx
 import React from "react";
 import styles from "./ActivityCard.module.css";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
