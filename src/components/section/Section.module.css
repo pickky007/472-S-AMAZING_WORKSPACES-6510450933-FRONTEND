@@ -1,0 +1,29 @@
+.section {
+  padding: 32px;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* ชิดซ้ายตามเริ่มต้น */
+  position: relative;
+}
+
+.buttonMore {
+  align-self: flex-end; /* จัด Icon ไปทางขวา */
+  margin-bottom: 8px; /* เพิ่มช่องว่างระหว่าง Icon และ A1 ตามต้องการ */
+}
+
+.title {
+  align-self: flex-start; /* จัด A1 ไปทางซ้าย */
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.content {
+  padding: 32px;
+}
+
+.icon {
+  color: #757575;
+}

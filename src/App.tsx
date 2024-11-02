@@ -1,17 +1,14 @@
 import React from "react";
 import "./App.css";
 import { UserProfilePage } from "./pages/UserProfilePage";
+import { Section } from "./components/section/Section";
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <h1>User Management System</h1>
-      </header>
-      <main className="App-content">
-        <UserProfilePage />
-      </main>
+        <Section />
     </div>
+
   );
 }
 export default App;
