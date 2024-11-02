@@ -2,6 +2,8 @@
 import React from "react";
 import styles from "./ActivityCard.module.css";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import IconButton from "@mui/material/IconButton";
+import Tooltip from "@mui/material/Tooltip";
 
 type ActivityCardProps = {
   color: string;
@@ -24,10 +26,7 @@ export function ActivityCard({
 }: ActivityCardProps) {
   return (
     <div className={styles.activityCard} onClick={onClick}>
-      <div
-        className={styles.sideBar}
-        style={{ backgroundColor: color }}
-      ></div>
+      <div className={styles.sideBar} style={{ backgroundColor: color }}></div>
       <div className={styles.content}>
         <h3 className={styles.title}>{title}</h3>
         <p className={styles.description}>{description}</p>
@@ -39,16 +38,20 @@ export function ActivityCard({
           <span className={styles.statusItem}>{date}</span>
         </div>
       </div>
-      <button
-        className={styles.moreButton}
-        onClick={(e) => {
-          e.stopPropagation(); // หยุดการแพร่กระจายของเหตุการณ์
-          console.log("test"); // แสดงข้อความในคอนโซล
-        }}
-        aria-label="more options"
-      >
-        <MoreVertIcon className={styles.icon} />
-      </button>
+      <div className={styles.containButton}>
+        <Tooltip title="More options" arrow>
+          <IconButton
+            className={styles.moreButton}
+            onClick={(e) => {
+              e.stopPropagation(); // หยุดการแพร่กระจายของเหตุการณ์
+              console.log("test"); // แสดงข้อความในคอนโซล
+            }}
+            aria-label="more options"
+          >
+            <MoreVertIcon className={styles.icon} />
+          </IconButton>
+        </Tooltip>
+      </div>
     </div>
   );
 }

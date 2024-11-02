@@ -1,4 +1,5 @@
 // src/components/section/Section.tsx
+import Tooltip from "@mui/material/Tooltip";
 import { ActivityCard } from "../activity/ActivityCard";
 import styles from "./Section.module.css";
 import IconButton from "@mui/material/IconButton";
@@ -50,10 +51,15 @@ export function Section() {
     <div className={styles.section}>
       <div className={styles.header}>
         <div className={styles.buttonMore}>
-          <IconButton aria-label="more options" color="primary" size="large">
+
+        <Tooltip title="Add options" arrow >
+
+          <IconButton aria-label="add options"  size="large">
             <AddIcon className={styles.icon}></AddIcon>
           </IconButton>
-          <IconButton aria-label="more options" color="primary" size="large">
+
+        </Tooltip>
+          <IconButton aria-label="more options"  size="large">
             <MoreVertIcon className={styles.icon}></MoreVertIcon>
           </IconButton>
         </div>

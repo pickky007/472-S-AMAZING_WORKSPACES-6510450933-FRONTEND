@@ -64,8 +64,12 @@
   border: none;
   padding: 8px;
   cursor: pointer;
-  margin: -8px -8px -8px 8px; /* negative margin to increase hit area */
   color: #757575;
+  display: flex;
+  align-items: center;
+}
+
+.containButton {
   display: flex;
   align-items: center;
 }
