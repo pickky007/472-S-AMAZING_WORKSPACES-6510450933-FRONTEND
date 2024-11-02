@@ -1,7 +1,7 @@
 .App {
-  max-width: 1200px;
+  /* max-width: ; */
   margin: 0 auto;
-  padding: 20px;
+  /* padding: 20px; */
 }
 
 .App-header {
@@ -13,7 +13,6 @@
 }
 
 .App-content {
-  padding: 1rem;
   background-color: white;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
