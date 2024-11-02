@@ -1,23 +1,9 @@
-// src/components/section/Section.tsx
+import React from 'react';
 import Tooltip from "@mui/material/Tooltip";
 import { ActivityCard } from "../activity/ActivityCard";
-import styles from "./Section.module.css";
 import IconButton from "@mui/material/IconButton";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import AddIcon from "@mui/icons-material/Add";
-
-interface ActivityProps {
-  id?: string;
-  title?: string;
-  description?: string;
-  status?: string;
-  assignTo?: string;
-  date?: {
-    start: string;
-    end: string;
-  };
-  variant?: "red" | "teal";
-}
 
 const activities = [
   {
@@ -48,24 +34,21 @@ const activities = [
 
 export function Section() {
   return (
-    <div className={styles.section}>
-      <div className={styles.header}>
-        <div className={styles.buttonMore}>
-
-        <Tooltip title="Add options" arrow >
-
-          <IconButton aria-label="add options"  size="large">
-            <AddIcon className={styles.icon}></AddIcon>
-          </IconButton>
-
-        </Tooltip>
-          <IconButton aria-label="more options"  size="large">
-            <MoreVertIcon className={styles.icon}></MoreVertIcon>
+    <div className="p-8">
+      <div className="flex flex-col items-start relative">
+        <div className="self-end mb-2">
+          <Tooltip title="Add options" arrow>
+            <IconButton aria-label="add options" size="large">
+              <AddIcon className="text-gray-600" />
+            </IconButton>
+          </Tooltip>
+          <IconButton aria-label="more options" size="large">
+            <MoreVertIcon className="text-gray-600" />
           </IconButton>
         </div>
-        <div className={styles.title}>A1</div>
+        <div className="self-start text-2xl font-bold">A1</div>
       </div>
-      <div className={styles.content}>
+      <div className="p-8">
         <div>
           {activities.map((activity, index) => (
             <ActivityCard

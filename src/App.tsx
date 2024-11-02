@@ -1,7 +1,7 @@
+// src/App.tsx
 import React from "react";
+
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import "./App.css";
-import { UserProfilePage } from "./pages/UserProfilePage";
 import { Section } from "./components/section/Section";
 import Sidebar from "./components/Sidebar";
 

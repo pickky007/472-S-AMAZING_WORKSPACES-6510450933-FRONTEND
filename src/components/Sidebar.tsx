@@ -1,4 +1,3 @@
-// src/components/Sidebar.tsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -18,7 +17,6 @@ import {
   ExpandLess,
   Logout,
 } from "@mui/icons-material";
-import styles from "./Sidebar.module.css";
 
 interface NavigationItem {
   label: string;
@@ -33,17 +31,17 @@ interface NavigationItem {
 const navigationItems: NavigationItem[] = [
   {
     label: "News feed",
-    icon: <Newspaper className={styles.icon} />,
+    icon: <Newspaper className="text-white" />,
     path: "/news-feed",
   },
   {
     label: "Kanbanboard",
-    icon: <Dashboard className={styles.icon} />,
+    icon: <Dashboard className="text-white" />,
     path: "/kanbanboard",
   },
   {
     label: "Projects",
-    icon: <Folder className={styles.icon} />,
+    icon: <Folder className="text-white" />,
     path: "/projects",
     subitems: [
       { label: "Project 1", path: "/project-1" },
@@ -77,68 +75,63 @@ function Sidebar() {
   }
 
   return (
-    <Box className={styles.sidebarContainer}>
-      <Box className={styles.workspaceHeader}>
-        <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
-          Workspacename
-        </Typography>
-      </Box>
+      <Box className="w-64 h-screen bg-foreground text-white flex flex-col">
+        <Box className="p-5 border-b border-gray-700">
+          <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
+            Workspacename
+          </Typography>
+        </Box>
 
-      <List className={styles.navList}>
-        {navigationItems.map((item) => (
-          <React.Fragment key={item.label}>
-            <ListItem
-              className={styles.navItem}
-              onClick={() => handleItemClick(item)}
-              sx={{ cursor: "pointer" }}
-            >
-              <ListItemIcon className={styles.navItemIcon}>
-                {item.icon}
-              </ListItemIcon>
-              <ListItemText
-                primary={
-                  <span className={styles.navItemText}>{item.label}</span>
-                }
-              />
-              {item.subitems &&
-                (expandedItem === item.label ? <ExpandLess /> : <ExpandMore />)}
-            </ListItem>
+        <List className="flex-1 py-2">
+          {navigationItems.map((item) => (
+              <React.Fragment key={item.label}>
+                <ListItem
+                    className="p-2 hover:bg-gray-500 cursor-pointer"
+                    onClick={() => handleItemClick(item)}
+                >
+                  <ListItemIcon className="min-w-10 text-white">
+                    {item.icon}
+                  </ListItemIcon>
+                  <ListItemText
+                      primary={<span className="text-sm font-normal">{item.label}</span>}
+                  />
+                  {item.subitems &&
+                      (expandedItem === item.label ? <ExpandLess /> : <ExpandMore />)}
+                </ListItem>
 
-            {item.subitems && (
-              <Collapse
-                in={expandedItem === item.label}
-                timeout="auto"
-                unmountOnExit
-              >
-                <List disablePadding>
-                  {item.subitems.map((subitem) => (
-                    <ListItem
-                      key={subitem.label}
-                      className={styles.subNavItem}
-                      onClick={() => handleSubItemClick(subitem.path)}
-                      sx={{ cursor: "pointer" }}
+                {item.subitems && (
+                    <Collapse
+                        in={expandedItem === item.label}
+                        timeout="auto"
+                        unmountOnExit
                     >
-                      <ListItemText primary={subitem.label} />
-                    </ListItem>
-                  ))}
-                </List>
-              </Collapse>
-            )}
-          </React.Fragment>
-        ))}
-      </List>
+                      <List disablePadding>
+                        {item.subitems.map((subitem) => (
+                            <ListItem
+                                key={subitem.label}
+                                className="pl-8 py-2 cursor-pointer"
+                                onClick={() => handleSubItemClick(subitem.path)}
+                            >
+                              <ListItemText primary={subitem.label} />
+                            </ListItem>
+                        ))}
+                      </List>
+                    </Collapse>
+                )}
+              </React.Fragment>
+          ))}
+        </List>
 
-      <ListItem
-        className={styles.logoutButton}
-        onClick={handleLogout}
-        sx={{ cursor: "pointer" }}
-      >
-        <ListItemIcon>
-          <Logout />
-        </ListItemIcon>
-        <ListItemText primary="Logout" />
-      </ListItem>
-    </Box>
+        <ListItem
+            className="border-t border-gray-700 mt-auto cursor-pointer"
+            onClick={handleLogout}
+        >
+          <ListItemIcon>
+            <Logout className="text-white" />
+          </ListItemIcon>
+          <ListItemText primary="Logout" />
+        </ListItem>
+      </Box>
   );
 }
 
