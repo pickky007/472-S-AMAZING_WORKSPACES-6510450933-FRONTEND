@@ -9,19 +9,21 @@ import {ActivityDetail} from "./components/activity/ActivityDetail"
 
 import { WorkspacePage } from "./pages/WorkspacePage";
 import { AllProject } from "./pages/AllProject";
+import { User } from "./models/User";
 
 function App() {
 
-  const [isAuthenticated, setIsAuthenticated] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user,setUser] = useState<User | null>(null);
 
   return (
 
     <Router>
       <div style={{ display: 'flex' }}>
-        {isAuthenticated && <Sidebar />}
-        <main style={{ flex: 1, padding: 20 }}>
+        {isAuthenticated && <Sidebar user={user} />}
+        <main style={{ flex: 1}}>
           <Routes>
-            <Route path="/" element={isAuthenticated ? <AllProject /> : <LoginPage setIsAuthenticated={setIsAuthenticated} />} />
+            <Route path="/" element={isAuthenticated ? <AllProject /> : <LoginPage setUser={setUser} setIsAuthenticated={setIsAuthenticated} />} />
             <Route path="/news-feed" element={<div>News Feed Page</div>} />
             <Route path="/kanbanboard" element={<WorkspacePage/>} />
             <Route path="/project-1" element={<div>Project 1</div>} />

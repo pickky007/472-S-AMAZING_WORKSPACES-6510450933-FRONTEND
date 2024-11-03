@@ -1,12 +1,12 @@
 import { IUserResponse } from "../types/user.types";
 
 export class User {
-  id: number;
+  username: string;
   firstName: string;
   lastName: string;
 
   constructor(data: IUserResponse) {
-    this.id = data.id;
+    this.username = data.username;
     this.firstName = data.first_name;
     this.lastName = data.last_name;
   }

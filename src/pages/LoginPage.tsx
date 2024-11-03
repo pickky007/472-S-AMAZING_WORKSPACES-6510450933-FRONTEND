@@ -4,19 +4,31 @@ import React, { useEffect, useState } from "react";
 import { Button, TextField } from "@mui/material";
 import { UserService } from "../services/userService";
 import { User } from "../models/User";
+import { IUserResponse } from "../types/user.types";
 
 interface LoginPageProps {
-  setIsAuthenticated?: (b: boolean) => void;
+  setIsAuthenticated: (isAuthenticated: boolean) => void;
+  setUser: (user: User) => void; // Assuming `User` is your user model
 }
 
-export function LoginPage({ setIsAuthenticated = () => {} }: LoginPageProps) {
+export function LoginPage({ setIsAuthenticated,setUser}: LoginPageProps) {
   const navigate = useNavigate();
   const [users, setUsers] = useState<User[]>([]);
 
   function handleSignIn() {
+    // Create user object based on the input data
+    const userData: IUserResponse = {
+      username: "user1",
+      first_name: "John",
+      last_name: "Doe",
+    };
+
+    const user = User.fromResponse(userData); // Create User instance
     setIsAuthenticated(true);
 
-    navigate("/");
+    // Navigate and pass the User object in state
+    setUser(user);
+    navigate("/", { state: { user } });
   }
 
   useEffect(() => {
@@ -27,7 +39,7 @@ export function LoginPage({ setIsAuthenticated = () => {} }: LoginPageProps) {
     try {
       const data = await UserService.getUsers();
       setUsers(data);
-      console.log("Fetched Users:", data); // ดูค่าที่ถูกตั้งใหม่
+      // console.log("Fetched Users:", data); // ดูค่าที่ถูกตั้งใหม่
     } catch (err) {
       console.error(err);
     }
@@ -60,7 +72,7 @@ export function LoginPage({ setIsAuthenticated = () => {} }: LoginPageProps) {
         <div className="flex flex-col items-center space-y-4">
           <Button
             variant="contained"
-            onClick={() => {}}
+            onClick={() => {handleSignIn()}}
             sx={{
               backgroundColor: "#448386",
               color: "white",
