@@ -1,24 +1,24 @@
 import { useNavigate } from 'react-router-dom';
-import styles from './ProjectCard.module.css';
+import styles from './WorkSpaceCard.module.css';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { Button } from '@mui/material';
 
-interface ProjectCardProps{
+interface WorkSpaceCardProps{
     projectName: String;
     description: String;
     owenerName: String
 }
 
-export function ProjectCard({ projectName, description, owenerName }:ProjectCardProps) {
+export function WorkSpaceCard({ projectName, description, owenerName }:WorkSpaceCardProps) {
     
     const handleClick = () => {
         console.log("Component clicked!");
       };
 
     return(
-        <div onClick={handleClick} className={styles.projectCard}>
+        <div onClick={handleClick} className={styles.workspaceCard}>
             <div className={styles.header}>
-                <div className={styles.projectHeaderInner}>
+                <div className={styles.workspaceHeaderInner}>
                     <p className={styles.projectName}>{projectName}</p>
                     <button className={styles.moreButton}>
                         <MoreVertIcon />

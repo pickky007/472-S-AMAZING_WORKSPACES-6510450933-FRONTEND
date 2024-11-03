@@ -16,6 +16,7 @@ import {
   ExpandMore,
   ExpandLess,
   Logout,
+  Home,
 } from "@mui/icons-material";
 
 interface NavigationItem {
@@ -30,9 +31,9 @@ interface NavigationItem {
 
 const navigationItems: NavigationItem[] = [
   {
-    label: "News feed",
-    icon: <Newspaper className="text-white" />,
-    path: "/news-feed",
+    label: "Home",
+    icon: <Home className="text-white" />,
+    path: "/home",
   },
   {
     label: "Kanbanboard",

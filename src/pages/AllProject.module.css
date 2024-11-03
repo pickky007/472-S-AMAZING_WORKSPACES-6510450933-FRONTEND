@@ -1,8 +1,0 @@
-.container{
-    display: grid;
-    grid-template-columns: 0fr 0fr 0fr;
-    column-gap: 4rem;
-    row-gap: 2rem;
-    flex-direction: row;
-    
-}

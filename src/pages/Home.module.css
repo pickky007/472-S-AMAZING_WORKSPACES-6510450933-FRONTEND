@@ -1,0 +1,28 @@
+.containerGrid{
+    justify-content: center;
+    display: grid;
+    grid-template-columns: 0fr 0fr 0fr;
+    column-gap: 2rem;
+    row-gap: 2rem;
+    flex-direction: row;
+    
+}
+
+.container{
+    padding: 20px;
+    justify-content: column;
+}
+
+.line{
+    background-color: rgb(171, 171, 171);
+    height: 0.15rem;
+    width: 63rem;
+    margin-bottom: 20px;
+}
+
+.buttonBox{
+    display: flex;
+    align-items: end;
+    justify-content: end;
+    margin-bottom: 10px;
+}

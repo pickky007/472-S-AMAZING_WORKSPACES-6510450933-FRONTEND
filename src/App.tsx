@@ -7,6 +7,7 @@ import Sidebar from "./components/Sidebar";
 import { LoginPage } from "./pages/LoginPage";
 import { RegisterPage } from "./pages/RegisterPage";
 import {ActivityDetail} from "./components/activity/ActivityDetail" 
+import { Home } from "./pages/Home";
 
 
 function App() {
@@ -14,13 +15,13 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   return (
-
     <Router>
       <div style={{ display: 'flex' }}>
         {isAuthenticated && <Sidebar />}
-        <main style={{ flex: 1, padding: 20 }}>
+        <main style={{ flex: 1}}>
           <Routes>
-            <Route path="/" element={isAuthenticated ? <Section /> : <LoginPage setIsAuthenticated={setIsAuthenticated} />} />
+            <Route path="/" element={isAuthenticated ? <Home /> : <LoginPage setIsAuthenticated={setIsAuthenticated} />} />
+            <Route path="/Home" element={<Home/>}/>
             <Route path="/news-feed" element={<div>News Feed Page</div>} />
             <Route path="/kanbanboard" element={<Section />} />
             <Route path="/project-1" element={<div>Project 1</div>} />

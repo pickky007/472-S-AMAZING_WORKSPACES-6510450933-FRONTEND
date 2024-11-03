@@ -4,8 +4,8 @@ import { Button } from '../common/Button';
 
 interface UserCardProps {
   user: User;
-  onEdit?: () => void; // Optional edit function
-  onDelete?: () => void; // Optional delete function
+  onEdit?: () => void;
+  onDelete?: () => void;
 }
 
 export function UserCard({ user, onEdit, onDelete }: UserCardProps) {
