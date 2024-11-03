@@ -9,3 +9,4 @@ export interface IActivityCreate {
 export interface IActivityResponse extends IActivityCreate {
     id: string;
 }
+

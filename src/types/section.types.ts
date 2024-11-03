@@ -7,4 +7,5 @@ export interface ISectionCreate {
 
 export interface ISectionResponse extends ISectionCreate {
     activities: IActivityResponse[];
+
 }

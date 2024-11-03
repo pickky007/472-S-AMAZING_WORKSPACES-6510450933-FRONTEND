@@ -1,5 +1,7 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 /** @type {import('tailwindcss').Config} */
-export const content = ["./src/**/*.{js,jsx,ts,tsx}",];
+export const content = ["./src/**/*.{js,jsx,ts,tsx}"];
+
 export const theme = {
   extend: {
     colors: {
@@ -11,10 +13,15 @@ export const theme = {
     },
   },
 };
+
 export const future = {
   hoverOnlyWhenSupported: true,
   respectDefaultRingColorOpacity: true,
   disableColorOpacityUtilitiesByDefault: true,
   enableHas: true,
 };
-export const plugins = [];
+
+export const plugins = [
+  // eslint-disable-next-line no-undef
+  require('tailwind-scrollbar'), // Add the scrollbar plugin
+];
