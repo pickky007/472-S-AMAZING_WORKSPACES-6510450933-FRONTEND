@@ -108,9 +108,7 @@
     "skipLibCheck": true,                                /* Skip type checking all .d.ts files. */
 
     "plugins": [
-      {
-        "name": "typescript-plugin-css-modules"
-      }
+ 
     ]
   }
 }
