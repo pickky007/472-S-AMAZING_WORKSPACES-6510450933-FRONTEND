@@ -29,31 +29,30 @@ export function PasswordField({ label, value, width,onChange }: PasswordFieldPro
     };
 
     return (
-        <div className={styles.passwordField}>
+        <div className="w-full">
+    <TextField
+        size="small"
+        label={label}
+        variant="outlined"
+        type={showPassword ? 'text' : 'password'}
+        value={value}
+        onChange={handleChange}
+        className={`w-[300px] rounded-lg focus-within:border-blue-600`}
+        InputProps={{
+            endAdornment: (
+                <InputAdornment position="end">
+                    <IconButton
+                        onClick={handleClickShowPassword}
+                        onMouseDown={handleMouseDownPassword}
+                        edge="end"
+                    >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                </InputAdornment>
+            ),
+        }}
+    />
+</div>
 
-            <TextField
-                size='small'
-                label={label}
-                variant="outlined"
-                type={showPassword ? 'text' : 'password'}
-                value={value}
-                onChange={handleChange}
-                sx={{width:{width}}}
-                InputProps={{
-
-                    endAdornment: (
-                        <InputAdornment position="end">
-                            <IconButton
-                                onClick={handleClickShowPassword}
-                                onMouseDown={handleMouseDownPassword}
-                                edge="end"
-                            >
-                                {showPassword ? <VisibilityOff /> : <Visibility />}
-                            </IconButton>
-                        </InputAdornment>
-                    ),
-                }}
-            />
-        </div>
     );
 }
