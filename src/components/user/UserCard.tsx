@@ -1,6 +1,6 @@
+import React from 'react';
 import { User } from '../../models/User';
 import { Button } from '../common/Button';
-import styles from './UserCard.module.css'; // นำเข้า CSS Module
 
 interface UserCardProps {
   user: User;
@@ -10,25 +10,25 @@ interface UserCardProps {
 
 export function UserCard({ user, onEdit, onDelete }: UserCardProps) {
   return (
-    <div className={styles.card}> {/* ใช้ className จาก CSS Module */}
-      <div className={styles.card__header}>
+    <div className="p-4 border border-gray-300 rounded-lg shadow-md"> {}
+      <div className="flex items-center gap-4"> {}
         {user.avatar ? (
           <img
             src={user.avatar}
             alt={user.fullName}
-            className={styles.card__avatar} // ใช้ className จาก CSS Module
+            className="w-12 h-12 rounded-full object-cover" 
           />
         ) : (
-          <div className={styles.card__initials}> {/* ใช้ className จาก CSS Module */}
+          <div className="w-12 h-12 rounded-full bg-gray-300 flex items-center justify-center text-gray-600"> {}
             {user.initials}
           </div>
         )}
         <div>
-          <h3 className={styles.card__name}>{user.fullName}</h3> {/* ใช้ className จาก CSS Module */}
-          <p className={styles.card__email}>{user.email}</p> {/* ใช้ className จาก CSS Module */}
+          <h3 className="text-lg font-semibold">{user.fullName}</h3> {}
+          <p className="text-gray-600">{user.email}</p> {}
         </div>
       </div>
-      <div className={styles.card__actions}> {/* ใช้ className จาก CSS Module */}
+      <div className="mt-4 flex gap-2"> {}
         {onEdit && (
           <Button label="Edit Profile" onClick={onEdit} />
         )}

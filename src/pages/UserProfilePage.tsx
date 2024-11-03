@@ -1,14 +1,13 @@
+import React from 'react';
 import { useUser } from '../hooks/useUser';
 import { UserCard } from '../components/user/UserCard';
 import styles from './UserProfilePage.module.css'; // นำเข้า CSS Module
-import { useState } from 'react';
 
 
 
 export function UserProfilePage() {
-  const { user, loading, error, updateUser, deleteUser } = useUser(1);
+  const { user, loading, error , deleteUser } = useUser(1);
   
-  const [a,setA] = useState(1);
   
 
   if (loading) {
