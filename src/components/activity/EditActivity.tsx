@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import Modal from 'react-modal';
-
+import styles from './EditActivity.module.css';
 type EditActivityProps = {
-  isOpen: boolean;
-  onClose: () => void;
-  onSave: (activityData: { activityName: string; description: string; assignee: string; startDate: string; endDate: string; }) => void;
+  isOpen?: boolean;
+  onClose?: () => void;
+  onSave?: (activityData: { activityName: string; description: string; assignee: string; startDate: string; endDate: string; }) => void;
 };
 
-export function EditActivity({ isOpen, onClose, onSave }:EditActivityProps){
+export function EditActivity({ isOpen=true, onClose=()=>{}, onSave=()=>{} }:EditActivityProps){
   const [activityName, setActivityName] = useState('');
   const [description, setDescription] = useState('');
   const [assignee, setAssignee] = useState('');
@@ -24,17 +24,10 @@ export function EditActivity({ isOpen, onClose, onSave }:EditActivityProps){
       isOpen={isOpen}
       onRequestClose={onClose}
       contentLabel="Edit Activity"
-      style={{
-        content: {
-          maxWidth: '400px',
-          margin: 'auto',
-          padding: '2rem',
-          borderRadius: '1rem',
-          textAlign: 'center',
-        },
-        overlay: { backgroundColor: 'rgba(0, 0, 0, 0.75)' },
-      }}
+      className={styles.content}
+      overlayClassName={styles.overlay}
     >
+
       <h2>Activity name</h2>
       <input 
         type="text" 
