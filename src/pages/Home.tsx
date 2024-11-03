@@ -1,10 +1,34 @@
-import { Button } from "@mui/material";
-import { WorkSpaceCard } from "../components/WorkSpaceCard";
-import Modal from "../components/Modal";
-import React, { useState } from "react";
+import { Button } from '@mui/material';
+import { WorkSpaceCard } from '../components/WorkSpaceCard';
+import Modal from '../components/Modal';
+import React, { useEffect, useState } from 'react';
+import { User } from '../models/User';
+import { Workspace } from '../models/Workspace';
+import { useLocation } from 'react-router-dom';
+import { WorkspaceService } from '../services/workspaceService';
 
 export function Home() {
+  const location = useLocation();
+  const user: User = location.state?.user;
+  const [workspaces, setWorkspace] = useState<Workspace[]>([]);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
+  useEffect(() => {
+    fetchWorkspace();
+  }, []);
+
+  async function fetchWorkspace() {
+    try {
+      const data = await WorkspaceService.getAllWorkspaceByUsername(
+        user.username,
+      );
+      console.log(user);
+      setWorkspace(data);
+      console.log('Fetched WorkspacesByID:', data);
+    } catch (err) {
+      console.error(err);
+    }
+  }
 
   return (
     <div className="p-5 flex flex-col">
@@ -12,10 +36,10 @@ export function Home() {
         <Button
           onClick={() => setIsModalOpen(true)}
           sx={{
-            backgroundColor: "#448386",
-            color: "white",
-            width: "130px",
-            "&:hover": { backgroundColor: "#9ABCA9" },
+            backgroundColor: '#448386',
+            color: 'white',
+            width: '130px',
+            '&:hover': { backgroundColor: '#9ABCA9' },
           }}
         >
           New Project

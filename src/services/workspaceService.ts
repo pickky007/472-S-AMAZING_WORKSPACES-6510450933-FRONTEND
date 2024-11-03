@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import axios from '../apis/axios';
 import { ENDPOINTS } from '../apis/endpoints';
 import { Workspace } from '../models/Workspace';

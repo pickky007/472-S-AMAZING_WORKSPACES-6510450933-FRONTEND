@@ -1,11 +1,11 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 
-import React, { useEffect, useState } from "react";
-import { Button, TextField } from "@mui/material";
-import { UserService } from "../services/userService";
-import { User } from "../models/User";
-import { IUserResponse } from "../types/user.types";
-import { PasswordField } from "../components/PasswordField";
+import React, { useEffect, useState } from 'react';
+import { Button, TextField } from '@mui/material';
+import { UserService } from '../services/userService';
+import { User } from '../models/User';
+import { IUserResponse } from '../types/user.types';
+import { PasswordField } from '../components/PasswordField';
 
 interface LoginPageProps {
   setIsAuthenticated: (isAuthenticated: boolean) => void;
@@ -13,16 +13,16 @@ interface LoginPageProps {
 }
 
 export function LoginPage({ setIsAuthenticated, setUser }: LoginPageProps) {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
 
-  function handleUsernameChange (event: React.ChangeEvent<HTMLInputElement>) {
+  function handleUsernameChange(event: React.ChangeEvent<HTMLInputElement>) {
     setUsername(event.target.value);
-  };
+  }
 
-  function handlePasswordChange (newValue: string)  {
+  function handlePasswordChange(newValue: string) {
     setPassword(newValue);
-  };
+  }
 
   const navigate = useNavigate();
   const [users, setUsers] = useState<User[]>([]);
@@ -30,9 +30,9 @@ export function LoginPage({ setIsAuthenticated, setUser }: LoginPageProps) {
   function handleSignIn() {
     // Create user object based on the input data
     const userData: IUserResponse = {
-      username: "user1",
-      first_name: "John",
-      last_name: "Doe",
+      username: 'user1',
+      first_name: 'John',
+      last_name: 'Doe',
     };
 
     const user = User.fromResponse(userData); // Create User instance
@@ -40,7 +40,7 @@ export function LoginPage({ setIsAuthenticated, setUser }: LoginPageProps) {
 
     // Navigate and pass the User object in state
     setUser(user);
-    navigate("/", { state: { user } });
+    navigate('/', { state: { user } });
   }
 
   useEffect(() => {
@@ -51,7 +51,7 @@ export function LoginPage({ setIsAuthenticated, setUser }: LoginPageProps) {
     try {
       const data = await UserService.getUsers();
       setUsers(data);
-      // console.log("Fetched Users:", data); // ดูค่าที่ถูกตั้งใหม่
+      console.log('Fetched User:', data); // ดูค่าที่ถูกตั้งใหม่
     } catch (err) {
       console.error(err);
     }
@@ -91,10 +91,10 @@ export function LoginPage({ setIsAuthenticated, setUser }: LoginPageProps) {
               handleSignIn();
             }}
             sx={{
-              backgroundColor: "#448386",
-              color: "white",
-              width: "300px",
-              "&:hover": { backgroundColor: "#9ABCA9" },
+              backgroundColor: '#448386',
+              color: 'white',
+              width: '300px',
+              '&:hover': { backgroundColor: '#9ABCA9' },
             }}
           >
             Sign in
