@@ -6,12 +6,15 @@ import { Section } from "./components/section/Section";
 import Sidebar from "./components/Sidebar";
 import { LoginPage } from "./pages/LoginPage";
 import { RegisterPage } from "./pages/RegisterPage";
+import {ActivityDetail} from "./components/activity/ActivityDetail" 
+
 
 function App() {
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   return (
+
     <Router>
       <div style={{ display: 'flex' }}>
         {isAuthenticated && <Sidebar />}
@@ -24,6 +27,7 @@ function App() {
             <Route path="/project-2" element={<div>Project 2</div>} />
             <Route path="/project-3" element={<div>Project 3</div>} />
             <Route path="/register" element={<RegisterPage />} />
+            <Route path="/activityDetail" element={<ActivityDetail title="Se" description="เป็นการทำงานร่วมกัน" status="ยังไม่เสร็จ" assignee ="peet" startDate="10" endDate="11"/>}/>
           </Routes>
         </main>
       </div>
