@@ -2,13 +2,15 @@
     margin-bottom: '6px';
     text-align: 'center';
     color: '#323232';
-    font-size: '60px';
+    font-size: 3rem;
+    font-weight: bold;
 }
 
 .heading2 {
     text-align: 'center';
     color: '#323232';
-    font-size: '30px';
+    font-size: 2rem;
+    font-weight: bold;
 }
 
 .hyperText {
@@ -43,8 +45,10 @@
     align-items: center;
     justify-content: space-between;
     width: 25rem;
-    height: 15;
+    height: 9.5rem;
     padding: 10;
+    margin-bottom: 1rem;
+
 }
 
 .inner-box2 {
@@ -53,8 +57,9 @@
     align-items: center;
     justify-content: space-between;
     width: 25rem;
-    height: 8rem;
+    height: 7rem;
     padding: 10;
+    margin-bottom: 10px;
 }
 
 .inner-box3 {
@@ -63,8 +68,9 @@
     align-items: center;
     justify-content: space-between;
     width: 25rem;
-    height: 5rem;
+    height: 6rem;
     padding: 10px;
+    padding-top: 1rem;
     margin: 10px;
 }
 
@@ -80,10 +86,19 @@
 .line {
     background: linear-gradient(90deg, #CDF3F5, #448386);
     height: 0.1rem;
-    width: 25rem;
+    width: 19rem;
+
 }
 
 .gradient-line {
     width: 1;
     height: 30rem;
+}
+
+.hyper-text{
+    color: #448386;
+}
+
+.hyper-text:hover{
+    color: #384638;
 }
