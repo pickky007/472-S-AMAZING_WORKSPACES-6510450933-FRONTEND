@@ -8,10 +8,11 @@ import { RegisterPage } from "./pages/RegisterPage";
 import {ActivityDetail} from "./components/activity/ActivityDetail" 
 
 import { WorkspacePage } from "./pages/WorkspacePage";
+import { AllProject } from "./pages/AllProject";
 
 function App() {
 
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
 
   return (
 
@@ -20,7 +21,7 @@ function App() {
         {isAuthenticated && <Sidebar />}
         <main style={{ flex: 1, padding: 20 }}>
           <Routes>
-            <Route path="/" element={isAuthenticated ? <WorkspacePage /> : <LoginPage setIsAuthenticated={setIsAuthenticated} />} />
+            <Route path="/" element={isAuthenticated ? <AllProject /> : <LoginPage setIsAuthenticated={setIsAuthenticated} />} />
             <Route path="/news-feed" element={<div>News Feed Page</div>} />
             <Route path="/kanbanboard" element={<WorkspacePage/>} />
             <Route path="/project-1" element={<div>Project 1</div>} />

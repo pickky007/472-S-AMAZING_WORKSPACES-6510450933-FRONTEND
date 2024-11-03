@@ -75,7 +75,7 @@ function Sidebar() {
   }
 
   return (
-      <Box className="w-64 h-screen bg-foreground text-white flex flex-col">
+      <Box className="w-64 h-screen bg-foreground text-white flex flex-col min-w-64">
         <Box className="p-5 border-b border-gray-700">
           <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
             Workspacename

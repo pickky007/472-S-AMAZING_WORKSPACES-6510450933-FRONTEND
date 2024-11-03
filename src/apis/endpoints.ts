@@ -7,5 +7,9 @@ export const ENDPOINTS = {
         LIST: '/users',
         LOGIN: '/auth/login', // Endpoint สำหรับล็อกอิน
         REGISTER: '/auth/register' // Endpoint สำหรับลงทะเบียน
-    }
+    },
+    WORKSPACE: {
+        GET_BY_USERNAME: (username: string) => `/users/${username}/workspaces`,
+        CREATE: '/workspaces'
+    },
 };

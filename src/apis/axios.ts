@@ -1,17 +1,19 @@
-import axios, { AxiosRequestConfig, InternalAxiosRequestConfig } from 'axios';
+import axios, { InternalAxiosRequestConfig } from "axios";
 
 // สร้าง axios instance
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:3000', // เปลี่ยนเป็น URL ของ localhost
+  baseURL: "http://localhost:3001", // เปลี่ยนเป็น URL ของ localhost
   timeout: 5000,
   headers: {
-    'Content-Type': 'application/json'
-  }
+    "Content-Type": "application/json",
+  },
 });
 
 // สร้าง named function สำหรับเพิ่ม token ใน headers
-function addAuthToken(config: InternalAxiosRequestConfig): InternalAxiosRequestConfig {
-  const token = localStorage.getItem('token');
+function addAuthToken(
+  config: InternalAxiosRequestConfig
+): InternalAxiosRequestConfig {
+  const token = localStorage.getItem("token");
   if (token) {
     // ตรวจสอบว่า headers ไม่ใช่ undefined
     if (config.headers) {

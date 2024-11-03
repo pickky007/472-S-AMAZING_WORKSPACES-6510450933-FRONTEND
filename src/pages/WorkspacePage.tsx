@@ -4,7 +4,6 @@ import { Section } from "../components/section/Section";
 import { Section as SectionType, Activity} from "../components/types";
 import Modal from "../components/activity/Modal";
 import { ActivityDetail } from "../components/activity/ActivityDetail";
-import { Button } from "@mui/material";
 
 const initialSections: Record<string, SectionType> = {
   "section-1": {

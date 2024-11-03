@@ -1,7 +1,6 @@
 import { Button, TextField } from "@mui/material";
 
 import React from "react";
-import styles from "./RegisterPage.module.css";
 
 export function RegisterPage() {
   function handleRegisterClick() {
@@ -9,31 +8,22 @@ export function RegisterPage() {
   }
 
   return (
-    <div className={styles.register}>
-      <div className={styles.registerFields}>
-        <h1>Register</h1>
+    <div className="flex items-center justify-center h-screen bg-gradient-to-r from-[#CDF3F5] to-[#448386]">
+      <div className="flex flex-col items-center w-96 h-120 bg-[#F9F6F2] rounded-lg shadow-md p-8">
+        <h1 className="text-3xl text-[#323232] mb-4">Register</h1>
 
-        <div className={styles.box2}>
-          <div className={styles.line}></div>
-
-          <TextField id="first-name-text-field" label="First Name"></TextField>
-          <TextField id="last-name-text-field" label="Last Name"></TextField>
-          <TextField
-            id="password-text-field"
-            label="Password"
-            hiddenLabel
-          ></TextField>
-          <TextField
-            id="confirm-password-text-field"
-            label="Password Again"
-            hidden
-          ></TextField>
+        <div className="flex flex-col items-center mb-6 space-y-4">
+          <div className="h-[2px] w-full bg-gradient-to-r from-[#CDF3F5] to-[#448386]"></div>
+          <TextField id="first-name-text-field" label="First Name" />
+          <TextField id="last-name-text-field" label="Last Name" />
+          <TextField id="password-text-field" label="Password" />
+          <TextField id="confirm-password-text-field" label="Password Again" />
         </div>
 
-        <div className={styles.box3}>
+        <div className="flex flex-col items-center space-y-4">
           <Button
             variant="contained"
-            onClick={handleRegisterClick}
+            onClick={() => {}}
             sx={{
               backgroundColor: "#448386",
               color: "white",
@@ -43,9 +33,11 @@ export function RegisterPage() {
           >
             Register
           </Button>
-          <div className={styles.rowBox}>
-            <p>Already have an account ?</p>
-            <a href="/">Log in.</a>
+          <div className="flex justify-between w-80">
+            <p>Already have an account?</p>
+            <a href="/" className="text-[#448386]">
+              Log in.
+            </a>
           </div>
         </div>
       </div>
