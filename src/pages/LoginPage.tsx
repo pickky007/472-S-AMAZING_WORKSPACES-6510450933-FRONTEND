@@ -2,12 +2,19 @@ import { useNavigate } from 'react-router-dom';
 import './LoginPage.css'
 import { Button, TextField } from "@mui/material";
 
-export function LoginPage() {
+interface LoginPageProps {
+    setIsAuthenticated?: (b: boolean) => void;
+}
+
+export function LoginPage({setIsAuthenticated = () => {}} : LoginPageProps) {
 
     const navigate = useNavigate();
 
-    function handleRegisterClick() {
-        navigate('/register');
+    function handleSignIn() {
+
+        setIsAuthenticated(true);
+
+        navigate('/');
     }
 
     return (
@@ -24,7 +31,7 @@ export function LoginPage() {
                     <TextField id="password-custom " label="Password" sx={{ width: 300 }} size='small' />
                 </div>
                 <div className="inner-box3">
-                    <Button variant="contained"
+                    <Button variant="contained" onClick={handleSignIn}
                         sx={{ backgroundColor: '#448386', color: 'white', width: '300px', '&:hover': { backgroundColor: '#9ABCA9' } }}>
                         Sign in
                     </Button>
