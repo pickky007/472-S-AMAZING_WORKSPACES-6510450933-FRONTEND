@@ -1,14 +1,15 @@
 .App {
-  max-width: 1200px;
+  /* max-width: ; */
   margin: 0 auto;
-  padding: 20px;
+/* padding: 20px; */
+
 }
 
 .App-header {
-  margin-bottom: 2rem;
+  margin-bottom: 10rem;
   padding: 1rem;
   background-color: var(--primary-color);
-  color: white;
+  color: rgb(199, 15, 15);
   border-radius: 8px;
 }
 
