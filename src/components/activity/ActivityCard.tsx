@@ -17,9 +17,10 @@ export function ActivityCard({ activity, onDragStart }: ActivityCardProps) {
         e.dataTransfer.setData("application/json", JSON.stringify(activity));
         onDragStart(activity);
       }}
-      className="flex items-stretch p-4 bg-white rounded-2xl shadow-md mb-4 
-                 transition-all duration-100 ease-in-out cursor-move
-                 hover:shadow-lg active:scale-95"
+      className="flex items-stretch p-4 bg-white rounded-2xl shadow-md mb-4
+        transition-all duration-100 ease-in-out 
+        active:scale-[0.98] active:shadow-sm
+        has-[button:active]:scale-100 has-[button:active]:shadow-md"
     >
       <div
         className="w-2 rounded-md mr-4"
