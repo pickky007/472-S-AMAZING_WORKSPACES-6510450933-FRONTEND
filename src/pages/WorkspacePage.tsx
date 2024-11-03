@@ -89,7 +89,7 @@ export function WorkspacePage() {
   const [sections, setSections] = useState(initialSections);
   const [draggedActivity, setDraggedActivity] = useState<Activity | null>(null);
   const [isOnAddActivity, setOnAddActivity] = useState<boolean>(false);
-
+  const [isOnAddSection, setOnAddSection] = useState<boolean>(false);
   const handleDragStart = (activity: Activity) => {
     setDraggedActivity(activity);
   };
@@ -130,7 +130,7 @@ export function WorkspacePage() {
       {/* Header with Add Section button */}
       <div className="w-full flex items-center mb-4 justify-between">
         <span className="self-start"></span> {/* Optional header text */}
-        <button className="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 flex items-center space-x-2">
+        <button onClick={()=>setOnAddSection(true)} className="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 flex items-center space-x-2">
           <span>Add section</span>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -189,6 +189,17 @@ export function WorkspacePage() {
           <input type="date" style={{ width: '48%', padding: '0.5rem', borderRadius: '0.25rem', border: '1px solid #ddd' }} />
         </div>
 
+        <button type="submit" style={{ display: 'block', width: '100%', padding: '0.75rem', backgroundColor: '#5DA27D', color: 'white', borderRadius: '0.25rem', border: 'none', cursor: 'pointer' }}>
+          Save
+        </button>
+      </form>
+    </Modal>
+
+    <Modal isOpen={isOnAddSection} onClose={() => setOnAddSection(false)}>
+      <h2 style={{ textAlign: 'center', marginBottom: '1rem' }}>Add Section</h2>
+      <form>
+        <label style={{ display: 'block', marginBottom: '0.5rem' }}>name</label>
+        <input type="text" placeholder="Section name" style={{ display: 'block', marginBottom: '1rem', width: '100%', padding: '0.5rem', borderRadius: '0.25rem', border: '1px solid #ddd' }} />
         <button type="submit" style={{ display: 'block', width: '100%', padding: '0.75rem', backgroundColor: '#5DA27D', color: 'white', borderRadius: '0.25rem', border: 'none', cursor: 'pointer' }}>
           Save
         </button>
