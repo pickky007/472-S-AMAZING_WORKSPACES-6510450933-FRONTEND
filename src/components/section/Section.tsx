@@ -16,6 +16,7 @@ interface SectionProps {
     targetIndex: number
   ) => void;
   onDragStart: (activity: Activity) => void;
+  setOnAddActivity: (b : boolean) => void;
 }
 
 export function Section({
@@ -23,10 +24,15 @@ export function Section({
   activities,
   onDrop,
   onDragStart,
+  setOnAddActivity
 }: SectionProps) {
   const [isOver, setIsOver] = useState(false);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
   const activitiesRef = useRef<(HTMLDivElement | null)[]>([]);
+
+  function handleOnAddOptionClick() {
+    setOnAddActivity(true);
+  }
 
   function getDragOverIndex(
     e: React.DragEvent<HTMLDivElement>,
@@ -115,7 +121,7 @@ export function Section({
         <div className="flex flex-col items-start relative">
           <div className="self-end mb-2 flex space-x-2">
             <Tooltip title="Add options">
-              <IconButton size="small">
+              <IconButton size="small" onClick={handleOnAddOptionClick}>
                 <AddIcon fontSize="small" />
               </IconButton>
             </Tooltip>
