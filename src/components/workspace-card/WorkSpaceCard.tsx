@@ -19,7 +19,7 @@ export function WorkSpaceCard({ projectName, description, owenerName }:WorkSpace
         <div onClick={handleClick} className={styles.workspaceCard}>
             <div className={styles.header}>
                 <div className={styles.workspaceHeaderInner}>
-                    <p className={styles.projectName}>{projectName}</p>
+                    <p className={styles.workspacetName}>{projectName}</p>
                     <button className={styles.moreButton}>
                         <MoreVertIcon />
                     </button>

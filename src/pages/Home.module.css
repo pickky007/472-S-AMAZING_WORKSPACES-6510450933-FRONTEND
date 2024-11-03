@@ -2,8 +2,8 @@
     justify-content: center;
     display: grid;
     grid-template-columns: 0fr 0fr 0fr;
-    column-gap: 2rem;
-    row-gap: 2rem;
+    column-gap: 5rem;
+    row-gap: 4rem;
     flex-direction: row;
     
 }
@@ -16,7 +16,7 @@
 .line{
     background-color: rgb(171, 171, 171);
     height: 0.15rem;
-    width: 63rem;
+    width: 100rem;
     margin-bottom: 20px;
 }
 
