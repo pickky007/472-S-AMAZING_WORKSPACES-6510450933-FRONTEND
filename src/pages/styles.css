@@ -1,0 +1,26 @@
+/* styles.css or your relevant CSS file */
+.workspace-container {
+  /* Ensure it has a maximum width if needed */
+  max-width: 100%; /* or a specific width, like 1200px */
+}
+
+.scrollbar {
+  /* Custom scrollbar styles */
+  scrollbar-width: thin;
+  scrollbar-color: gray #e2e8f0; /* Track color */
+}
+
+/* For Webkit browsers */
+.scrollbar::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  background-color: gray; /* Thumb color */
+  border-radius: 4px;
+}
+
+.scrollbar::-webkit-scrollbar-track {
+  background: #e2e8f0; /* Track color */
+}

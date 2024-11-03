@@ -2,10 +2,10 @@
 import React, { useState } from "react";
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { Section } from "./components/section/Section";
 import Sidebar from "./components/Sidebar";
 import { LoginPage } from "./pages/LoginPage";
 import { RegisterPage } from "./pages/RegisterPage";
+import { WorkspacePage } from "./pages/WorkspacePage";
 
 function App() {
 
@@ -17,9 +17,9 @@ function App() {
         {isAuthenticated && <Sidebar />}
         <main style={{ flex: 1, padding: 20 }}>
           <Routes>
-            <Route path="/" element={isAuthenticated ? <Section /> : <LoginPage setIsAuthenticated={setIsAuthenticated} />} />
+            <Route path="/" element={isAuthenticated ? <WorkspacePage /> : <LoginPage setIsAuthenticated={setIsAuthenticated} />} />
             <Route path="/news-feed" element={<div>News Feed Page</div>} />
-            <Route path="/kanbanboard" element={<Section />} />
+            <Route path="/kanbanboard" element={<WorkspacePage/>} />
             <Route path="/project-1" element={<div>Project 1</div>} />
             <Route path="/project-2" element={<div>Project 2</div>} />
             <Route path="/project-3" element={<div>Project 3</div>} />
