@@ -1,11 +1,10 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { ActivityCard } from "../activity/ActivityCard";
 import { Section as SectionType, Activity } from "../types";
-
 
 interface SectionProps {
   section: SectionType;
@@ -16,7 +15,7 @@ interface SectionProps {
     targetIndex: number
   ) => void;
   onDragStart: (activity: Activity) => void;
-  setOnAddActivity: (b : boolean) => void;
+  setOnAddActivity: (b: boolean) => void;
 }
 
 export function Section({
@@ -28,10 +27,16 @@ export function Section({
 }: SectionProps) {
   const [isOver, setIsOver] = useState(false);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
+  const [showMenu, setShowMenu] = useState(false);
   const activitiesRef = useRef<(HTMLDivElement | null)[]>([]);
+  const menuRef = useRef<HTMLDivElement | null>(null);
 
   function handleOnAddOptionClick() {
     setOnAddActivity(true);
+  }
+
+  function handleMenuToggle() {
+    setShowMenu(prevShowMenu => !prevShowMenu);
   }
 
   function getDragOverIndex(
@@ -110,9 +115,28 @@ export function Section({
     }
   }
 
+  // เมื่อกดที่ใดๆจะซ่อน dropdown menu
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setShowMenu(false);
+      }
+    }
+
+    if (showMenu) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showMenu]);
+
   return (
     <div
-      className="flex-shrink-0 w-80 bg-gray-50 rounded-lg mx-2 min-h-[700px] "
+      className="flex-shrink-0 w-80 bg-gray-50 rounded-lg mx-2 min-h-[700px]"
       onDragOver={(e) => handleDragOver(e)}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
@@ -125,9 +149,19 @@ export function Section({
                 <AddIcon fontSize="small" />
               </IconButton>
             </Tooltip>
-            <IconButton size="small">
+            <IconButton size="small" onClick={handleMenuToggle}>
               <MoreVertIcon fontSize="small" />
             </IconButton>
+            {showMenu && (
+              <div
+                ref={menuRef}
+                className="absolute right-0 mt-2 w-48 bg-white border border-gray-300 rounded-md shadow-lg z-10"
+                style={{ marginTop: "2rem" }}
+              >
+                <button className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100">Edit</button>
+                <button className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100">Delete</button>
+              </div>
+            )}
           </div>
           <div className="self-start text-2xl font-bold mb-4">
             {section.title}
