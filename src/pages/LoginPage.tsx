@@ -1,14 +1,16 @@
-import { useNavigate } from 'react-router-dom';
-import './LoginPage.css'
+import { useNavigate } from "react-router-dom";
+
+import React from "react";
+import "./LoginPage.css";
 import { Button, TextField } from "@mui/material";
 import { PasswordField } from '../components/common/PasswordField';
 import { useState } from 'react';
 
 interface LoginPageProps {
-    setIsAuthenticated?: (b: boolean) => void;
+  setIsAuthenticated?: (b: boolean) => void;
 }
 
-export function LoginPage({setIsAuthenticated = () => {}} : LoginPageProps) {
+export function LoginPage({ setIsAuthenticated = () => {} }: LoginPageProps) {
 
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
@@ -52,6 +54,8 @@ export function LoginPage({setIsAuthenticated = () => {}} : LoginPageProps) {
                     </div>
                 </div>
             </div>
+
         </div>
-    );
+
+  );
 }

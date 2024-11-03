@@ -3,8 +3,9 @@ import styles from "./RegisterPage.module.css"
 import { useState } from "react";
 import { PasswordField } from "../components/common/PasswordField";
 
-export function RegisterPage() {
 
+export function RegisterPage() {
+ 
     const [username, setUsername] = useState("");
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
@@ -36,16 +37,13 @@ export function RegisterPage() {
         console.log("Hello World")
     }
 
-    return (
-        <div className={styles.register}>
-
+  return (
             <div className={styles.registerFields}>
                 <div className={styles.box1}>
                     <h1 className={styles.heading2}>Register</h1>
                     <div className={styles.line}></div>
                 </div>
-                
-
+            
                 <div className={styles.box2}>
                     <TextField id="username-text-field" label="Username" sx={{ width: 300 }} size='small' value={username} onChange={handleUsernameChange}/>
                     <TextField id="first-name-text-field" label="First name" sx={{ width: 300 }} size='small' value={firstName}  onChange={handleFirsrNameChange}/>
@@ -69,6 +67,6 @@ export function RegisterPage() {
                 </div>
 
             </div>
-        </div>
-    );
+        
+  );
 }
