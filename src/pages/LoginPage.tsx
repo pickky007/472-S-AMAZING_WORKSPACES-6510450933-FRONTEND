@@ -1,8 +1,10 @@
 import { useNavigate } from "react-router-dom";
 
-import React from "react";
+import React, {useEffect, useState} from "react";
 import "./LoginPage.css";
 import { Button, TextField } from "@mui/material";
+import {UserService} from "../services/userService";
+import { User } from "../models/User";
 
 interface LoginPageProps {
   setIsAuthenticated?: (b: boolean) => void;
@@ -10,11 +12,26 @@ interface LoginPageProps {
 
 export function LoginPage({ setIsAuthenticated = () => {} }: LoginPageProps) {
   const navigate = useNavigate();
+  const [users, setUsers] = useState<User[]>([]);
 
   function handleSignIn() {
     setIsAuthenticated(true);
 
     navigate("/");
+  }
+
+  useEffect(() => {
+    fetchUser();
+  }, []);
+
+  async function fetchUser() {
+    try {
+      const data = await UserService.getUsers();
+      setUsers(data);
+      console.log('Fetched Users:', data); // ดูค่าที่ถูกตั้งใหม่
+    } catch (err) {
+      console.error(err);
+    }
   }
 
   return (

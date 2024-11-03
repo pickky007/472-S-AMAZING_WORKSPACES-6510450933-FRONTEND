@@ -4,15 +4,11 @@ export class User {
   id: number;
   firstName: string;
   lastName: string;
-  email: string;
-  avatar: string;
 
   constructor(data: IUserResponse) {
     this.id = data.id;
     this.firstName = data.first_name;
     this.lastName = data.last_name;
-    this.email = data.email;
-    this.avatar = data.avatar;
   }
 
   get fullName(): string {
@@ -27,7 +23,6 @@ export class User {
     return {
       first_name: this.firstName,
       last_name: this.lastName,
-      email: this.email,
     };
   }
 

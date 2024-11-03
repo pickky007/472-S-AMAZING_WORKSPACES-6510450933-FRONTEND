@@ -1,5 +1,6 @@
 import { ProjectCard } from '../components/project-card/ProjectCard';
 import styles from './AllProject.module.css';
+import React from 'react';
 
 export function AllProject() {
     return (
