@@ -7,11 +7,13 @@ import { Activity } from "../types";
 interface ActivityCardProps {
   activity: Activity;
   onDragStart: (activity: Activity) => void;
+  onClick: (activity: Activity) => void;
 }
 
-export function ActivityCard({ activity, onDragStart }: ActivityCardProps) {
+export function ActivityCard({ activity, onDragStart, onClick }: ActivityCardProps) {
   return (
     <div
+      onClick={()=>onClick(activity)}
       draggable
       onDragStart={(e) => {
         e.dataTransfer.setData("application/json", JSON.stringify(activity));

@@ -3,6 +3,8 @@ import { Section } from "../components/section/Section";
 
 import { Section as SectionType, Activity} from "../components/types";
 import Modal from "../components/activity/Modal";
+import { ActivityDetail } from "../components/activity/ActivityDetail";
+import { Button } from "@mui/material";
 
 const initialSections: Record<string, SectionType> = {
   "section-1": {
@@ -88,11 +90,17 @@ const initialSections: Record<string, SectionType> = {
 export function WorkspacePage() {
   const [sections, setSections] = useState(initialSections);
   const [draggedActivity, setDraggedActivity] = useState<Activity | null>(null);
+  const [selectedActivity, setSelectedActivity] = useState<Activity | null>(null);
   const [isOnAddActivity, setOnAddActivity] = useState<boolean>(false);
   const [isOnAddSection, setOnAddSection] = useState<boolean>(false);
+
   const handleDragStart = (activity: Activity) => {
     setDraggedActivity(activity);
   };
+
+  const handleActivityClick = (activity: Activity) => {
+    setSelectedActivity(activity);
+  }
 
   function handleDrop(
     activity: Activity,
@@ -158,6 +166,7 @@ export function WorkspacePage() {
                 onDrop={handleDrop}
                 onDragStart={handleDragStart}
                 setOnAddActivity={setOnAddActivity}
+                onActivityClick={handleActivityClick}
               />
               {/* Add divider after each section except the last one */}
               {index < Object.values(sections).length - 1 && (
@@ -205,6 +214,12 @@ export function WorkspacePage() {
         </button>
       </form>
     </Modal>
+
+    {selectedActivity && (
+        <div className="activity-detail-container fixed right-0 top-0 bottom-0 w-1/3 bg-white shadow-lg p-4">
+          <ActivityDetail assignee="???" description={selectedActivity.description} endDate="??" startDate="??" status={selectedActivity.status} title={selectedActivity.title} onClose={()=>setSelectedActivity(null)}/>
+        </div>
+      )}
     </div>
   );
 }

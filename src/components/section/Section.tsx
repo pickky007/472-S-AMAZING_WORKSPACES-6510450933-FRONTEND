@@ -16,6 +16,7 @@ interface SectionProps {
   ) => void;
   onDragStart: (activity: Activity) => void;
   setOnAddActivity: (b: boolean) => void;
+  onActivityClick: (activity: Activity) => void;
 }
 
 export function Section({
@@ -23,7 +24,8 @@ export function Section({
   activities,
   onDrop,
   onDragStart,
-  setOnAddActivity
+  setOnAddActivity,
+  onActivityClick
 }: SectionProps) {
   const [isOver, setIsOver] = useState(false);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
@@ -184,7 +186,7 @@ export function Section({
                 className="relative"
                 onDragOver={(e) => handleDragOver(e, index)}
               >
-                <ActivityCard activity={activity} onDragStart={onDragStart} />
+                <ActivityCard activity={activity} onDragStart={onDragStart} onClick={onActivityClick} />
                 {dragOverIndex === index + 1 && (
                   <div className="h-2 bg-blue-200 my-2" />
                 )}
