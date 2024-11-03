@@ -14,7 +14,7 @@ export function EditActivity({ isOpen=true, onClose=()=>{}, onSave=()=>{} }:Edit
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
 
-  const handleSave = () => {
+  function handleSave () {
     onSave({ activityName, description, assignee, startDate, endDate });
     onClose(); // Close the modal after saving
   };

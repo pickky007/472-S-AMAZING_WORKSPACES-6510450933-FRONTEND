@@ -37,7 +37,8 @@ const navigationItems: NavigationItem[] = [
   {
     label: "Home",
     icon: <Home className="text-white" />,
-    path: "/",
+
+    path: "/home",
   },
   {
     label: "Kanbanboard",
@@ -64,7 +65,7 @@ function Sidebar({ user }: SidebarProps) {
     if (item.subitems) {
       setExpandedItem(expandedItem === item.label ? null : item.label);
     } else {
-      if (item.path === "/") {
+      if (item.path === "/home") {
         navigate(item.path, { state: { user } }); // Pass user data as state
       } else {
         navigate(item.path);

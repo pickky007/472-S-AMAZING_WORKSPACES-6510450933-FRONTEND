@@ -4,12 +4,12 @@ import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Sidebar from "./components/Sidebar";
 import { LoginPage } from "./pages/LoginPage";
-import { RegisterPage } from "./pages/RegisterPage";
-import {ActivityDetail} from "./components/activity/ActivityDetail" 
+import {ActivityDetail} from "./components/ActivityDetail" 
+import { Home } from "./pages/Home";
 
 import { WorkspacePage } from "./pages/WorkspacePage";
-import { AllProject } from "./pages/AllProject";
 import { User } from "./models/User";
+import { RegisterPage } from "./pages/RegisterPage";
 
 function App() {
 
@@ -17,13 +17,13 @@ function App() {
   const [user,setUser] = useState<User | null>(null);
 
   return (
-
     <Router>
       <div style={{ display: 'flex' }}>
         {isAuthenticated && <Sidebar user={user} />}
         <main style={{ flex: 1}}>
           <Routes>
-            <Route path="/" element={isAuthenticated ? <AllProject /> : <LoginPage setUser={setUser} setIsAuthenticated={setIsAuthenticated} />} />
+            <Route path="/" element={isAuthenticated ? <Home /> : <LoginPage setUser={setUser} setIsAuthenticated={setIsAuthenticated} />} />
+            <Route path="/Home" element={<Home/>}/>
             <Route path="/news-feed" element={<div>News Feed Page</div>} />
             <Route path="/kanbanboard" element={<WorkspacePage/>} />
             <Route path="/project-1" element={<div>Project 1</div>} />

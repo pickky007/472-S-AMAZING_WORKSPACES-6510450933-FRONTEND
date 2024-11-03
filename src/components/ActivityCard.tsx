@@ -2,7 +2,7 @@ import React from "react";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
-import { Activity } from "../types";
+import { Activity } from "./types";
 
 interface ActivityCardProps {
   activity: Activity;

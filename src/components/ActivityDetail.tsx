@@ -16,11 +16,11 @@ export function ActivityDetail({ title, description, status, assignee, startDate
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const openModal = () => {
+  function openModal () {
     setIsModalOpen(true);
   };
 
-  const closeModal = () => {
+  function closeModal() {
     setIsModalOpen(false);
   };
 

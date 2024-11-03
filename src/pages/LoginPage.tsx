@@ -5,13 +5,25 @@ import { Button, TextField } from "@mui/material";
 import { UserService } from "../services/userService";
 import { User } from "../models/User";
 import { IUserResponse } from "../types/user.types";
+import { PasswordField } from "../components/PasswordField";
 
 interface LoginPageProps {
   setIsAuthenticated: (isAuthenticated: boolean) => void;
   setUser: (user: User) => void; // Assuming `User` is your user model
 }
 
-export function LoginPage({ setIsAuthenticated,setUser}: LoginPageProps) {
+export function LoginPage({ setIsAuthenticated, setUser }: LoginPageProps) {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  function handleUsernameChange (event: React.ChangeEvent<HTMLInputElement>) {
+    setUsername(event.target.value);
+  };
+
+  function handlePasswordChange (newValue: string)  {
+    setPassword(newValue);
+  };
+
   const navigate = useNavigate();
   const [users, setUsers] = useState<User[]>([]);
 
@@ -55,24 +67,29 @@ export function LoginPage({ setIsAuthenticated,setUser}: LoginPageProps) {
 
         <div className="flex flex-col items-center mb-6 space-y-4">
           <div className="h-[2px] w-full bg-gradient-to-r from-[#CDF3F5] to-[#448386]"></div>
+
           <TextField
-            id="textfield-custom"
+            id="textfield-custom "
             label="Username"
             sx={{ width: 300 }}
             size="small"
+            onChange={handleUsernameChange}
+            value={username}
           />
-          <TextField
-            id="password-custom"
+          <PasswordField
             label="Password"
-            sx={{ width: 300 }}
-            size="small"
+            width={300}
+            onChange={handlePasswordChange}
+            value={password}
           />
         </div>
 
         <div className="flex flex-col items-center space-y-4">
           <Button
             variant="contained"
-            onClick={() => {handleSignIn()}}
+            onClick={() => {
+              handleSignIn();
+            }}
             sx={{
               backgroundColor: "#448386",
               color: "white",
