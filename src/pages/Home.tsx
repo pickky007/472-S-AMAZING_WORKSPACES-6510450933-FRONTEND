@@ -12,23 +12,47 @@ export function Home() {
   const user: User = location.state?.user;
   const [workspaces, setWorkspace] = useState<Workspace[]>([]);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    fetchWorkspace();
+    fetchWorkspaces();
   }, []);
 
-  async function fetchWorkspace() {
+  async function fetchWorkspaces() {
     try {
       const data = await WorkspaceService.getAllWorkspaceByUsername(
         user.username,
       );
-      console.log(user);
       setWorkspace(data);
       console.log('Fetched WorkspacesByID:', data);
     } catch (err) {
       console.error(err);
+    } finally {
+      setIsLoading(false);
     }
   }
+
+  const handleCreateWorkspace = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formElements = e.currentTarget
+      .elements as typeof e.currentTarget.elements & {
+      name: HTMLInputElement;
+      description: HTMLInputElement;
+    };
+    const newWorkspaceData = {
+      name: formElements.name.value,
+      description: formElements.description.value,
+      owner: user.username,
+    };
+
+    try {
+      await WorkspaceService.createWorkspace(newWorkspaceData);
+      fetchWorkspaces(); // Refresh workspaces after creation
+      setIsModalOpen(false); // Close the modal
+    } catch (error) {
+      console.error('Error creating workspace:', error);
+    }
+  };
 
   return (
     <div className="p-5 flex flex-col">
@@ -47,43 +71,26 @@ export function Home() {
       </div>
       <div className="bg-gray-400 h-px w-full mb-5" />
       <div className="grid grid-cols-3 gap-x-20 gap-y-16 justify-center">
-        <WorkSpaceCard
-          projectName="projectA"
-          description="This is Project A"
-          ownerName="Cat 1"
-        />
-        <WorkSpaceCard
-          projectName="projectA"
-          description="This is Project A"
-          ownerName="Cat 1"
-        />
-        <WorkSpaceCard
-          projectName="projectA"
-          description="This is Project A"
-          ownerName="Cat 1"
-        />
-        <WorkSpaceCard
-          projectName="projectA"
-          description="This is Project A"
-          ownerName="Cat 1"
-        />
-        <WorkSpaceCard
-          projectName="projectA"
-          description="This is Project A"
-          ownerName="Cat 1"
-        />
-        <WorkSpaceCard
-          projectName="projectA"
-          description="This is Project A"
-          ownerName="Cat 1"
-        />
+        {isLoading ? (
+          <p>Loading workspaces...</p>
+        ) : (
+          workspaces.map((workspace) => (
+            <WorkSpaceCard
+              key={workspace.id}
+              projectName={workspace.name}
+              description={workspace.description || 'No description available'}
+              ownerName={workspace.owner}
+            />
+          ))
+        )}
       </div>
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <h2 className="text-center mb-4">New Workspace</h2>
-        <form>
+        <form onSubmit={handleCreateWorkspace}>
           <label className="block mb-2">Workspace name</label>
           <input
             type="text"
+            name="name" // Add name for form element
             placeholder="Activity name"
             className="block mb-4 w-full p-2 border border-gray-300 rounded"
           />
@@ -91,6 +98,7 @@ export function Home() {
           <label className="block mb-2">Description</label>
           <input
             type="text"
+            name="description" // Add name for form element
             placeholder="Description"
             className="block mb-4 w-full p-2 border border-gray-300 rounded"
           />

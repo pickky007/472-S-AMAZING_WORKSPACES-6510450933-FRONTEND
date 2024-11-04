@@ -6,13 +6,12 @@ import { Button } from '@mui/material';
 type ActivityProps = {
   title: string;
   description: string;
-  status: string;
   assignee: string;
   startDate: string;
   endDate: string;
   onClose?: () => void;
 };
-export function ActivityDetail({ title, description, status, assignee, startDate, endDate, onClose = () => {} }: ActivityProps) {
+export function ActivityDetail({ title, description, assignee, startDate, endDate, onClose = () => {} }: ActivityProps) {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -51,9 +50,6 @@ export function ActivityDetail({ title, description, status, assignee, startDate
       <div>
         <h3 style={{ fontSize: '1.25rem', marginBottom: '1rem' }}>{description}</h3>
         <ul style={{ listStyleType: 'none', padding: 0, lineHeight: '1.8' }}>
-          <li style={{ display: 'flex', alignItems: 'center', fontSize: '1.125rem', marginBottom: '0.625rem' }}>
-            <span style={{ color: 'brown', marginRight: '0.625rem' }}>●</span> {status}
-          </li>
           <li style={{ display: 'flex', alignItems: 'center', fontSize: '1.125rem', marginBottom: '0.625rem' }}>
             <span style={{ color: 'brown', marginRight: '0.625rem' }}>●</span> Assign to <a href="/" style={{ color: 'blue' }}>{assignee}</a>
           </li>

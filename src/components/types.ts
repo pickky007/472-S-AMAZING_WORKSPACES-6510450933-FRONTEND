@@ -1,15 +1,14 @@
-export interface Activity {
+export interface IActivityCard {
   id: string;
   title: string;
   description: string;
   color: string;
-  status: string;
-  assignee: string;
+  owner: string;
   date: string;
 }
 
-export interface Section {
+export interface ISectionCard {
   id: string;
   title: string;
-  activities: Activity[];
+  activities: IActivityCard[];
 }

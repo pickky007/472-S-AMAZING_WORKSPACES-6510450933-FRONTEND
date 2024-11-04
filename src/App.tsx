@@ -30,7 +30,7 @@ function App() {
             <Route path="/project-2" element={<div>Project 2</div>} />
             <Route path="/project-3" element={<div>Project 3</div>} />
             <Route path="/register" element={<RegisterPage />} />
-            <Route path="/activityDetail" element={<ActivityDetail title="Se" description="เป็นการทำงานร่วมกัน" status="ยังไม่เสร็จ" assignee ="peet" startDate="10" endDate="11"/>}/>
+            <Route path="/activityDetail" element={<ActivityDetail title="Se" description="เป็นการทำงานร่วมกัน" assignee ="peet" startDate="10" endDate="11"/>}/>
           </Routes>
         </main>
       </div>

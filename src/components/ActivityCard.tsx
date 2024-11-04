@@ -1,22 +1,26 @@
-import React from "react";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
-import IconButton from "@mui/material/IconButton";
-import Tooltip from "@mui/material/Tooltip";
-import { Activity } from "./types";
+import React from 'react';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
+import { IActivityCard } from './types';
 
 interface ActivityCardProps {
-  activity: Activity;
-  onDragStart: (activity: Activity) => void;
-  onClick: (activity: Activity) => void;
+  activity: IActivityCard;
+  onDragStart: (activity: IActivityCard) => void;
+  onClick: (activity: IActivityCard) => void;
 }
 
-export function ActivityCard({ activity, onDragStart, onClick }: ActivityCardProps) {
+export function ActivityCard({
+  activity,
+  onDragStart,
+  onClick,
+}: ActivityCardProps) {
   return (
     <div
-      onClick={()=>onClick(activity)}
+      onClick={() => onClick(activity)}
       draggable
       onDragStart={(e) => {
-        e.dataTransfer.setData("application/json", JSON.stringify(activity));
+        e.dataTransfer.setData('application/json', JSON.stringify(activity));
         onDragStart(activity);
       }}
       className="flex items-stretch p-4 bg-white rounded-2xl shadow-md mb-4
@@ -33,11 +37,8 @@ export function ActivityCard({ activity, onDragStart, onClick }: ActivityCardPro
         <p className="text-gray-600 mb-3">{activity.description}</p>
         <div className="flex flex-col gap-1">
           <span className="flex items-center text-sm text-gray-600">
-            {activity.status}
-          </span>
-          <span className="flex items-center text-sm text-gray-600">
-            Assign to{" "}
-            <span className="text-emerald-700 ml-1">{activity.assignee}</span>
+            Assign to{' '}
+            <span className="text-emerald-700 ml-1">{activity.owner}</span>
           </span>
           <span className="flex items-center text-sm text-gray-600">
             {activity.date}
@@ -50,7 +51,7 @@ export function ActivityCard({ activity, onDragStart, onClick }: ActivityCardPro
             size="small"
             onClick={(e) => {
               e.stopPropagation();
-              console.log("options clicked");
+              console.log('options clicked');
             }}
           >
             <MoreVertIcon fontSize="small" />
