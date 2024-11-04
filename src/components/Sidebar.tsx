@@ -41,11 +41,6 @@ const navigationItems: NavigationItem[] = [
     path: "/home",
   },
   {
-    label: "Kanbanboard",
-    icon: <Dashboard className="text-white" />,
-    path: "/kanbanboard",
-  },
-  {
     label: "Projects",
     icon: <Folder className="text-white" />,
     path: "/projects",

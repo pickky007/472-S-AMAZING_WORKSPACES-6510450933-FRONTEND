@@ -58,6 +58,7 @@ export function ActivityCard({
           </IconButton>
         </Tooltip>
       </div>
+      
     </div>
   );
 }

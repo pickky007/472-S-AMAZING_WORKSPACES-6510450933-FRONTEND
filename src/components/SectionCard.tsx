@@ -17,6 +17,7 @@ interface SectionProps {
   onDragStart: (activity: IActivityCard) => void;
   setOnAddActivity: (b: boolean) => void;
   onActivityClick: (activity: IActivityCard) => void;
+  onEditClick: () => void; // เพิ่ม prop ใหม่สำหรับการเปิด modal edit
 }
 
 export function SectionCard({
@@ -26,6 +27,7 @@ export function SectionCard({
   onDragStart,
   setOnAddActivity,
   onActivityClick,
+  onEditClick
 }: SectionProps) {
   const [isOver, setIsOver] = useState(false);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
@@ -160,12 +162,10 @@ export function SectionCard({
                 className="absolute right-0 mt-2 w-48 bg-white border border-gray-300 rounded-md shadow-lg z-10"
                 style={{ marginTop: '2rem' }}
               >
-                <button className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100">
-                  Edit
-                </button>
-                <button className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100">
-                  Delete
-                </button>
+
+                <button className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100"onClick={onEditClick}>Edit
+              </button>
+                <button className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100">Delete</button>
               </div>
             )}
           </div>

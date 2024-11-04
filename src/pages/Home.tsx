@@ -1,7 +1,7 @@
 import { Button } from '@mui/material';
 import { WorkSpaceCard } from '../components/WorkSpaceCard';
 import Modal from '../components/Modal';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { User } from '../models/User';
 import { Workspace } from '../models/Workspace';
 import { useLocation } from 'react-router-dom';
@@ -13,6 +13,11 @@ export function Home() {
   const [workspaces, setWorkspace] = useState<Workspace[]>([]);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [isJoinModalOpen, setIsJoinModalOpen] = useState<boolean>(false);
+
+  const workspaceName = useRef<HTMLInputElement>(null);
+  const workspaceCode = useRef<HTMLInputElement>(null);
+  const workspaceDescription = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     fetchWorkspaces();
@@ -32,41 +37,44 @@ export function Home() {
     }
   }
 
-  const handleCreateWorkspace = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const formElements = e.currentTarget
-      .elements as typeof e.currentTarget.elements & {
-      name: HTMLInputElement;
-      description: HTMLInputElement;
-    };
-    const newWorkspaceData = {
-      name: formElements.name.value,
-      description: formElements.description.value,
-      owner: user.username,
-    };
+  function handleCreate(event: React.FormEvent) {
+    console.log(workspaceName.current?.value);
+    console.log(workspaceDescription.current?.value);
 
-    try {
-      await WorkspaceService.createWorkspace(newWorkspaceData);
-      fetchWorkspaces(); // Refresh workspaces after creation
-      setIsModalOpen(false); // Close the modal
-    } catch (error) {
-      console.error('Error creating workspace:', error);
-    }
-  };
+    event.preventDefault();
+  }
+
+  function handleJoin(event: React.FormEvent) {
+    console.log(workspaceCode.current?.value);
+
+    event.preventDefault();
+  }
 
   return (
     <div className="p-5 flex flex-col">
       <div className="flex justify-end mb-2">
         <Button
+          onClick={() => setIsJoinModalOpen(true)}
+          sx={{
+            backgroundColor: '#448386',
+            color: 'white',
+            width: '160px',
+            '&:hover': { backgroundColor: '#9ABCA9' },
+          }}
+        >
+          Join Workspace
+        </Button>
+        <div className="w-5"></div>
+        <Button
           onClick={() => setIsModalOpen(true)}
           sx={{
             backgroundColor: '#448386',
             color: 'white',
-            width: '130px',
+            width: '160px',
             '&:hover': { backgroundColor: '#9ABCA9' },
           }}
         >
-          New Project
+          New Workspace
         </Button>
       </div>
       <div className="bg-gray-400 h-px w-full mb-5" />
@@ -84,21 +92,44 @@ export function Home() {
           ))
         )}
       </div>
+
+      <Modal isOpen={isJoinModalOpen} onClose={() => setIsJoinModalOpen(false)}>
+        <h2 className="text-center mb-4">Join workspaces</h2>
+        <form onSubmit={handleJoin}>
+          <label className="block mb-2">Workspace code</label>
+
+          <input
+            type="text"
+            ref={workspaceCode}
+            placeholder="Enter code"
+            className="block mb-4 w-full p-2 border border-gray-300 rounded"
+          />
+
+          <button
+            type="submit"
+            className="block w-full p-3 bg-green-600 text-white rounded cursor-pointer"
+          >
+            Join
+          </button>
+        </form>
+      </Modal>
+
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <h2 className="text-center mb-4">New Workspace</h2>
-        <form onSubmit={handleCreateWorkspace}>
+
+        <form onSubmit={handleCreate}>
           <label className="block mb-2">Workspace name</label>
           <input
             type="text"
-            name="name" // Add name for form element
-            placeholder="Activity name"
+            ref={workspaceName}
+            placeholder="Workspace name"
             className="block mb-4 w-full p-2 border border-gray-300 rounded"
           />
 
           <label className="block mb-2">Description</label>
           <input
             type="text"
-            name="description" // Add name for form element
+            ref={workspaceDescription}
             placeholder="Description"
             className="block mb-4 w-full p-2 border border-gray-300 rounded"
           />
