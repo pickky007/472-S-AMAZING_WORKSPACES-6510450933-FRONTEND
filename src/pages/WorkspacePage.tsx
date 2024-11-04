@@ -5,7 +5,6 @@ import { ActivityService } from '../services/activityService';
 import {
   ISectionCard as SectionType,
   IActivityCard,
-  IActivityCreate,
 } from '../components/types';
 import Modal from '../components/Modal';
 import { ActivityDetail } from '../components/ActivityDetail';
@@ -14,6 +13,9 @@ import { Activity } from '../models/Activity';
 import { Workspace } from '../models/Workspace';
 import { WorkspaceService } from '../services/workspaceService';
 import { ISectionCreate } from '../types/section.types';
+import { User } from '../models/User';
+import { IUserLogin } from '../types/user.types';
+import { IActivityCreate } from '../types/activity.types';
 
 type ActivityType = {
   id: string;
@@ -33,7 +35,13 @@ type SectionType2 = {
   activities: ActivityType[];
 };
 
-export function WorkspacePage({ workspaceTo }: { workspaceTo: Workspace }) {
+export function WorkspacePage({
+  workspaceTo,
+  user,
+}: {
+  workspaceTo: Workspace;
+  user: IUserLogin;
+}) {
   const [sections, setSections] = useState<Record<string, SectionType2>>({});
   const [draggedActivity, setDraggedActivity] = useState<ActivityType | null>(
     null,
@@ -65,12 +73,15 @@ export function WorkspacePage({ workspaceTo }: { workspaceTo: Workspace }) {
             workspaceTo.id,
           );
 
+        console.log(activities);
+
         const sectionKey = `section-${section.id}`;
         transformedSections[sectionKey] = {
           id: sectionKey,
           rawId: section.id,
           title: section.name,
           activities: activities.map((activity) => {
+            const owner = activity.owner;
             const startDate = new Date(activity.startDate);
             const endDate = new Date(activity.endDate);
             const color =
@@ -99,7 +110,7 @@ export function WorkspacePage({ workspaceTo }: { workspaceTo: Workspace }) {
               color,
               title: activity.name,
               description: activity.description,
-              owner: '@P.Num',
+              owner: owner,
               date: `Date ${formatDate(startDate)} - ${formatDate(endDate)}`, // ใช้วันที่ที่จัดรูปแบบ
               sectionId: sectionKey,
             };
@@ -223,8 +234,11 @@ export function WorkspacePage({ workspaceTo }: { workspaceTo: Workspace }) {
       description: description.current?.value!,
       start_date: sDate.current?.value!,
       end_date: eDate.current?.value!,
+      owner: user.username,
       section_id: selectSecId,
     };
+
+    console.log(act);
 
     ActivityService.createActivity(act)
       .then((r) => {

@@ -18,6 +18,7 @@ import {
   Home,
 } from '@mui/icons-material';
 import { User } from '../models/User';
+import { IUserLogin } from '../types/user.types';
 
 interface NavigationItem {
   label: string;
@@ -30,7 +31,8 @@ interface NavigationItem {
 }
 
 interface SidebarProps {
-  user: User | null; // Accept the User or null if not authenticated
+  user: IUserLogin | null; // Accept the User or null if not authenticated
+  setIsAuthenticated: (isAuthenticated: boolean) => void;
 }
 
 const navigationItems: NavigationItem[] = [
@@ -42,7 +44,7 @@ const navigationItems: NavigationItem[] = [
   },
 ];
 
-function Sidebar({ user }: SidebarProps) {
+function Sidebar({ user, setIsAuthenticated }: SidebarProps) {
   const navigate = useNavigate();
   const [expandedItem, setExpandedItem] = useState<string | null>(null);
 
@@ -63,9 +65,8 @@ function Sidebar({ user }: SidebarProps) {
   }
 
   function handleLogout() {
-    // เพิ่ม logic การ logout ที่นี่
-    // ตัวอย่างเช่น:
-    // logout().then(() => navigate('/login'));
+    setIsAuthenticated(false);
+    navigate('/');
   }
 
   return (

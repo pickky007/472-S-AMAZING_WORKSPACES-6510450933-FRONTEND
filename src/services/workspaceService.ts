@@ -13,6 +13,13 @@ export class WorkspaceService {
         `${ENDPOINTS.WORKSPACE.GET_BY_USERNAME(username)}`,
         { withCredentials: true },
       );
+
+
+      // Check if response.data is null and return an empty array if so
+      if (!response.data) {
+        return []; // Return an empty array as a placeholder
+      }
+
       return response.data.map((workspace) =>
         Workspace.fromResponse(workspace),
       );

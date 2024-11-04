@@ -35,6 +35,8 @@ export function SectionCard({
   const activitiesRef = useRef<(HTMLDivElement | null)[]>([]);
   const menuRef = useRef<HTMLDivElement | null>(null);
 
+  console.log(activities);
+
   function handleMenuToggle() {
     setShowMenu((prevShowMenu) => !prevShowMenu);
   }

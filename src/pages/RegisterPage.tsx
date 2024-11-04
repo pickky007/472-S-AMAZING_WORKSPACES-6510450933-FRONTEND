@@ -2,8 +2,12 @@ import { Button, TextField } from '@mui/material';
 import { useState } from 'react';
 import { PasswordField } from '../components/PasswordField';
 import React from 'react';
+import { IUserCreate } from '../types/user.types';
+import { UserService } from '../services/userService';
+import { useNavigate } from 'react-router-dom';
 
 export function RegisterPage() {
+  const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -31,7 +35,21 @@ export function RegisterPage() {
     setConfirmPassword(newValue);
   }
 
-  function handleRegisterClick() {}
+  async function handleRegisterClick() {
+    let userRegis: IUserCreate = {
+      username: username,
+      first_name: firstName,
+      last_name: lastName,
+      password: password,
+    };
+
+    try {
+      await UserService.register(userRegis);
+      navigate('/'); // Navigate to home on success
+    } catch (err) {
+      alert('Registration failed: ' + JSON.stringify(err));
+    }
+  }
 
   return (
     <div className="flex flex-col  items-center justify-center h-screen bg-gradient-to-r from-[#CDF3F5] to-[#448386]">
@@ -79,8 +97,6 @@ export function RegisterPage() {
             value={confirmPassword}
           />
         </div>
-        <div>{username}</div>
-
         <div className="flex flex-col items-center justify-between w-full mt-2 ">
           <Button
             variant="contained"

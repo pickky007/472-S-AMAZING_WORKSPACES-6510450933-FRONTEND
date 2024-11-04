@@ -33,12 +33,3 @@ export interface IActivityResponse {
   endDate: string;
   // Add other backend fields as needed
 }
-
-export interface IActivityCreate {
-  name: string;
-  description: string;
-  start_date: string;
-  end_date: string;
-  workspace_id: string;
-  section_id: number;
-}

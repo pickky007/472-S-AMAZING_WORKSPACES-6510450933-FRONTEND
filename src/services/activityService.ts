@@ -42,6 +42,7 @@ export class ActivityService {
         ENDPOINTS.WORKSPACE.CREATE_ACTIVITY(
           activity.workspace_id,
           activity.section_id,
+          activity.owner,
         ),
         activity,
         {

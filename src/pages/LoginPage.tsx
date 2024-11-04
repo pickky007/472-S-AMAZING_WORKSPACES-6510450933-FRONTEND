@@ -4,12 +4,12 @@ import React, { useEffect, useState } from 'react';
 import { Button, TextField } from '@mui/material';
 import { UserService } from '../services/userService';
 import { User } from '../models/User';
-import { IUserResponse } from '../types/user.types';
+import { IUserLogin, IUserResponse } from '../types/user.types';
 import { PasswordField } from '../components/PasswordField';
 
 interface LoginPageProps {
   setIsAuthenticated: (isAuthenticated: boolean) => void;
-  setUser: (user: User) => void; // Assuming `User` is your user model
+  setUser: (user: IUserLogin) => void; // Assuming `User` is your user model
 }
 
 export function LoginPage({ setIsAuthenticated, setUser }: LoginPageProps) {
@@ -27,30 +27,21 @@ export function LoginPage({ setIsAuthenticated, setUser }: LoginPageProps) {
   const navigate = useNavigate();
   const [users, setUsers] = useState<User[]>([]);
 
-  function handleSignIn() {
-    const userData: IUserResponse = {
-      username: 'user1',
-      first_name: 'John',
-      last_name: 'Doe',
+  async function handleSignIn() {
+    let userLogin: IUserLogin = {
+      username: username,
+      password: password,
     };
 
-    const user = User.fromResponse(userData);
-    setIsAuthenticated(true);
-
-    setUser(user);
-    navigate('/', { state: { user } });
-  }
-
-  useEffect(() => {
-    fetchUser();
-  }, []);
-
-  async function fetchUser() {
     try {
-      const data = await UserService.getUsers();
-      setUsers(data);
+      await UserService.login(userLogin);
+
+      setIsAuthenticated(true);
+
+      setUser(userLogin);
+      navigate('/', { state: { userLogin } });
     } catch (err) {
-      console.error(err);
+      alert('Login failed: ' + JSON.stringify(err));
     }
   }
 

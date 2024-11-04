@@ -8,16 +8,17 @@ import { WorkspacePage } from './pages/WorkspacePage';
 import { User } from './models/User';
 import { RegisterPage } from './pages/RegisterPage';
 import { Workspace } from './models/Workspace';
+import { IUserLogin } from './types/user.types';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<IUserLogin | null>(null);
   const [workspaceTo, setWorkspaceTo] = useState<Workspace | null>(null);
 
   return (
     <Router>
       <div style={{ display: 'flex' }}>
-        {isAuthenticated && <Sidebar user={user} />}
+        {isAuthenticated && <Sidebar user={user} setIsAuthenticated={setIsAuthenticated} />}
         <main style={{ flex: 1 }}>
           <Routes>
             <Route
@@ -41,8 +42,8 @@ function App() {
             <Route
               path="/kanbanboard"
               element={
-                workspaceTo ? (
-                  <WorkspacePage workspaceTo={workspaceTo} />
+                workspaceTo && user ? (
+                  <WorkspacePage workspaceTo={workspaceTo} user={user!} />
                 ) : (
                   <Navigate to="/" replace /> // เปลี่ยนเส้นทางไปยังหน้า Login
                 )

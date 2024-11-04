@@ -10,3 +10,8 @@ export interface IUserCreate {
   last_name: string;
   password: string;
 }
+
+export interface IUserLogin {
+  username: string;
+  password: string;
+}

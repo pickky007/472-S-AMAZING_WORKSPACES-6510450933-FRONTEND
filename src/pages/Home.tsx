@@ -7,10 +7,11 @@ import { Workspace } from '../models/Workspace';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { WorkspaceService } from '../services/workspaceService';
 import { IWorkspaceCreate } from '../types/workspace.types';
+import { IUserLogin } from '../types/user.types';
 
 interface WorkspacePageProps {
   setWorkspaceTo: (workspaceTo: Workspace) => void;
-  user: User;
+  user: IUserLogin;
 }
 
 export function Home({ setWorkspaceTo, user }: WorkspacePageProps) {
