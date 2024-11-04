@@ -27,7 +27,8 @@ WORKDIR /home/${USERNAME}/workspaces/frontend
 # [Optional] Set the default user. Omit if you want to keep the default as root.
 USER ${USERNAME}
 
-COPY package.json package-lock.json ./
+# COPY package.json package-lock.json ./
+COPY package.json ./
 RUN sudo npm install
 
 COPY ./ ./
