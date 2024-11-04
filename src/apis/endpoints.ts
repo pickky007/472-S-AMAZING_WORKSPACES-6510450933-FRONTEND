@@ -15,11 +15,11 @@ export const ENDPOINTS = {
     GET_ACTIVITIES: (workspaceId: string, sectionId: number) =>
         `/workspaces/${workspaceId}/sections/${sectionId}/activities`, // New endpoint for activities
     CREATE: (username: string, ) => `/users/${username}/workspaces/create`,
-    JOIN: (username: string, workspace_id: number) => `/users/${username}/workspaces/${workspace_id}/join`,
-    CREATE_SECTION: (workspace_id: number) => `/workspaces/${workspace_id}/sections/create`,
-    CREATE_ACTIVITY: (workspace_id: number, section_id: number) => `/workspaces/${workspace_id}/${section_id}/activities/create`,
-    MOVE_ACTIVITY: (workspace_id: number) => `/workspaces/${workspace_id}/activities/move`,
-    EDIT_ACTIVITY: (workspace_id: number, section_id: number, activity_id: number) => `/workspaces/${workspace_id}/${section_id}/activities/${activity_id}/edit`,
-    EDIT_SECTION: (workspace_id: number, section_id: number) => `/workspaces/${workspace_id}/${section_id}/edit`,
+    JOIN: (username: string, workspace_id: string) => `/users/${username}/workspaces/${workspace_id}/join`,
+    CREATE_SECTION: (workspace_id: string) => `/workspaces/${workspace_id}/sections/create`,
+    CREATE_ACTIVITY: (workspace_id: string, section_id: number) => `/workspaces/${workspace_id}/${section_id}/activities/create`,
+    MOVE_ACTIVITY: (workspace_id: string) => `/workspaces/${workspace_id}/activities/move`,
+    EDIT_ACTIVITY: (workspace_id: string, section_id: number, activity_id: number) => `/workspaces/${workspace_id}/${section_id}/activities/${activity_id}/edit`,
+    EDIT_SECTION: (workspace_id: string, section_id: number) => `/workspaces/${workspace_id}/${section_id}/edit`,
   },
 };

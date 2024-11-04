@@ -7,7 +7,7 @@ export class Activity {
     startDate: Date;
     endDate: Date;
     sectionId: number;
-    workspace_id: number;
+    workspace_id: string;
 
     constructor(data: IActivityResponse) {
         this.id = data.id;

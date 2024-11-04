@@ -10,66 +10,96 @@ import Modal from '../components/Modal';
 import { ActivityDetail } from '../components/ActivityDetail';
 import { Section } from '../models/Section';
 import { Activity } from '../models/Activity';
+import { Workspace } from '../models/Workspace';
 
 type ActivityType = {
   id: string;
+  rawId: number; // เพิ่ม rawId เพื่อเก็บ ID จริงจาก backend
   color: string;
   title: string;
   description: string;
   owner: string;
   date: string;
+  sectionId: string; // เพิ่ม sectionId เพื่อติดตามว่า activity อยู่ใน section ไหน
 };
 
 type SectionType2 = {
   id: string;
+  rawId: number; // เพิ่ม rawId เพื่อเก็บ ID จริงจาก backend
   title: string;
   activities: ActivityType[];
 };
 
-export function WorkspacePage() {
+export function WorkspacePage({ workspaceTo }: { workspaceTo: Workspace }) {
   const [sections, setSections] = useState<Record<string, SectionType2>>({});
-  const [draggedActivity, setDraggedActivity] = useState<IActivityCard | null>(null);
-  const [selectedActivity, setSelectedActivity] = useState<IActivityCard | null>(null);
+  const [draggedActivity, setDraggedActivity] = useState<ActivityType | null>(
+    null,
+  );
+  const [selectedActivity, setSelectedActivity] = useState<ActivityType | null>(
+    null,
+  );
   const [isOnAddActivity, setOnAddActivity] = useState<boolean>(false);
   const [isOnAddSection, setOnAddSection] = useState<boolean>(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const fetchData = async () => {
     try {
-      const sectionData: Section[] = await SectionService.getAllSectionsByWorkspaceId('ac5b1e');
+      const sectionData: Section[] =
+        await SectionService.getAllSectionsByWorkspaceId(workspaceTo.id);
       const transformedSections: Record<string, SectionType2> = {};
-      const now = new Date(); // Get the current date
+      const now = new Date();
 
       for (const section of sectionData) {
-        const activities: Activity[] = await ActivityService.getActivitiesBySectionAndWorkspace(
-          section.id,
-          'ac5b1e',
-        );
-        transformedSections[`section-${section.id}`] = {
-          id: `section-${section.id}`,
+        const activities: Activity[] =
+          await ActivityService.getActivitiesBySectionAndWorkspace(
+            section.id,
+            workspaceTo.id,
+          );
+
+        const sectionKey = `section-${section.id}`;
+        transformedSections[sectionKey] = {
+          id: sectionKey,
+          rawId: section.id,
           title: section.name,
           activities: activities.map((activity) => {
             const startDate = new Date(activity.startDate);
             const endDate = new Date(activity.endDate);
-            // Determine the color based on the date
-            const color = now > endDate // Overdue
-              ? '#CC2E2E'
-              : now >= startDate && now <= endDate // Ongoing
-                ? '#3A8C84'
-                : '#CC2E2E'; // Default if not defined, can be adjusted
+            const color =
+              now > endDate
+                ? '#CC2E2E'
+                : now >= startDate && now <= endDate
+                  ? '#3A8C84'
+                  : '#CC2E2E';
+
+            // สร้าง unique key โดยรวม section ID และ activity ID
+            const activityKey = `${sectionKey}-activity-${activity.id}`;
+
+            // ฟังก์ชันสำหรับจัดรูปแบบวันที่
+            const formatDate = (date: Date): string => {
+              const year = date.getFullYear();
+              const month = String(date.getMonth() + 1).padStart(2, '0');
+              const day = String(date.getDate()).padStart(2, '0');
+              const hours = String(date.getHours()).padStart(2, '0');
+              const minutes = String(date.getMinutes()).padStart(2, '0');
+              return `${year}-${month}-${day} ${hours}:${minutes}:00`; // สตริงที่จัดรูปแบบ
+            };
+
+            console.log(activity.startDate); // สำหรับการดีบัก
 
             return {
-              id: `activity-${activity.id}`,
-              color, // Use the determined color
+              id: activityKey,
+              rawId: activity.id,
+              color,
               title: activity.name,
               description: activity.description,
-              owner: '@P.Num', // Replace with actual owner data if available
-              date: `Date ${startDate.toLocaleString()} - ${endDate.toLocaleString()}`, // Format as needed
+              owner: '@P.Num',
+              date: `Date ${formatDate(startDate)} - ${formatDate(endDate)}`, // ใช้วันที่ที่จัดรูปแบบ
+              sectionId: sectionKey,
             };
           }),
         };
       }
-      console.log(transformedSections);
       setSections(transformedSections);
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -80,53 +110,101 @@ export function WorkspacePage() {
     fetchData();
   }, []);
 
-  function handleEditClick() {
-    setIsEditModalOpen(true);
-  }
-
-  function handleDragStart(activity: IActivityCard) {
+  function handleDragStart(activity: ActivityType) {
     setDraggedActivity(activity);
   }
 
-  function handleActivityClick(activity: IActivityCard) {
+  function handleActivityClick(activity: ActivityType) {
     setSelectedActivity(activity);
   }
 
-  function handleDrop(
-    activity: IActivityCard,
+  async function handleDrop(
+    activity: ActivityType,
     targetSectionId: string,
     targetIndex: number,
   ) {
     if (!draggedActivity) return;
 
-    const sourceSectionId = Object.keys(sections).find((sectionId) =>
-      sections[sectionId].activities.some((a) => a.id === activity.id),
-    );
+    // หา source section จาก activity.sectionId ที่เราเพิ่มเข้าไป
+    const sourceSectionId = draggedActivity.sectionId;
 
-    if (!sourceSectionId) return;
+    // ถ้าลากไปที่เดิม ไม่ต้องทำอะไร
+    if (
+      sourceSectionId === targetSectionId &&
+      sections[targetSectionId].activities[targetIndex]?.id ===
+        draggedActivity.id
+    ) {
+      setDraggedActivity(null);
+      return;
+    }
 
-    setSections((prevSections) => {
-      const newSections = { ...prevSections };
+    try {
+      setIsLoading(true);
 
-      // Remove from source
-      newSections[sourceSectionId].activities = newSections[sourceSectionId].activities.filter((a) => a.id !== activity.id);
+      // แปลง section ID เป็นตัวเลขโดยใช้ rawId ที่เก็บไว้
+      const toSectionId = sections[targetSectionId].rawId;
 
-      // Insert at target position
-      const targetActivities = [...newSections[targetSectionId].activities];
-      targetActivities.splice(targetIndex, 0, activity);
-      newSections[targetSectionId].activities = targetActivities;
+      // เรียก API เพื่ออัปเดตตำแหน่งใน backend
+      await ActivityService.moveActivity(
+        workspaceTo.id,
+        toSectionId,
+        draggedActivity.rawId,
+      );
 
-      return newSections;
-    });
+      // สร้าง activity ใหม่ด้วย ID ที่อัปเดตแล้ว
+      const updatedActivity = {
+        ...draggedActivity,
+        id: `${targetSectionId}-activity-${draggedActivity.rawId}`,
+        sectionId: targetSectionId,
+      };
 
-    setDraggedActivity(null);
+      // อัปเดต state
+      setSections((prevSections) => {
+        const newSections = { ...prevSections };
+
+        // ลบจาก source section
+        newSections[sourceSectionId] = {
+          ...newSections[sourceSectionId],
+          activities: newSections[sourceSectionId].activities.filter(
+            (a) => a.id !== draggedActivity.id,
+          ),
+        };
+
+        // เพิ่มไปยัง target section
+        const targetActivities = [...newSections[targetSectionId].activities];
+        targetActivities.splice(targetIndex, 0, updatedActivity);
+        newSections[targetSectionId] = {
+          ...newSections[targetSectionId],
+          activities: targetActivities,
+        };
+
+        return newSections;
+      });
+
+      // รีเฟรชข้อมูล
+      await fetchData();
+    } catch (error) {
+      console.error('Error moving activity:', error);
+      alert('Failed to move activity. Please try again.');
+      await fetchData();
+    } finally {
+      setIsLoading(false);
+      setDraggedActivity(null);
+    }
   }
+
+  // ... ส่วนที่เหลือของ component (render, modals, etc.) ...
 
   return (
     <div className="flex flex-col items-start relative w-full max-w-full px-4">
-      {/* Header with Add Section button */}
+      {isLoading && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-4 rounded-lg">Loading...</div>
+        </div>
+      )}
+
       <div className="w-full flex items-center mb-4 justify-between">
-        <span className="self-start"></span> {/* Optional header text */}
+        <span className="self-start"></span>
         <button
           onClick={() => setOnAddSection(true)}
           className="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 flex items-center space-x-2"
@@ -147,7 +225,6 @@ export function WorkspacePage() {
         </button>
       </div>
 
-      {/* Sections with horizontal scroll */}
       <div className="w-full overflow-x-auto">
         <div className="flex min-w-fit">
           {Object.values(sections).map((section, index) => (
@@ -159,9 +236,8 @@ export function WorkspacePage() {
                 onDragStart={handleDragStart}
                 setOnAddActivity={setOnAddActivity}
                 onActivityClick={handleActivityClick}
-                onEditClick={handleEditClick}
+                onEditClick={() => setIsEditModalOpen(true)}
               />
-              {/* Add divider after each section except the last one */}
               {index < Object.values(sections).length - 1 && (
                 <div className="w-px bg-gray-200 h-full" />
               )}
@@ -170,11 +246,29 @@ export function WorkspacePage() {
         </div>
       </div>
 
+      {/* Existing Modals */}
+      {/* ... */}
+      {selectedActivity && (
+        <div className="activity-detail-container fixed right-0 top-0 bottom-0 w-1/3 bg-white shadow-lg p-4">
+          <ActivityDetail
+            owner={selectedActivity.owner}
+            description={selectedActivity.description}
+            date={selectedActivity.date}
+            title={selectedActivity.title}
+            onClose={() => setSelectedActivity(null)}
+          />
+        </div>
+      )}
+
       {/* Add Activity Modal */}
       <Modal isOpen={isOnAddActivity} onClose={() => setOnAddActivity(false)}>
-        <h2 style={{ textAlign: 'center', marginBottom: '1rem' }}>Add Activity</h2>
+        <h2 style={{ textAlign: 'center', marginBottom: '1rem' }}>
+          Add Activity
+        </h2>
         <form>
-          <label style={{ display: 'block', marginBottom: '0.5rem' }}>Activity name</label>
+          <label style={{ display: 'block', marginBottom: '0.5rem' }}>
+            Activity name
+          </label>
           <input
             type="text"
             placeholder="Activity name"
@@ -188,7 +282,9 @@ export function WorkspacePage() {
             }}
           />
 
-          <label style={{ display: 'block', marginBottom: '0.5rem' }}>Description</label>
+          <label style={{ display: 'block', marginBottom: '0.5rem' }}>
+            Description
+          </label>
           <input
             type="text"
             placeholder="Description"
@@ -202,7 +298,9 @@ export function WorkspacePage() {
             }}
           />
 
-          <label style={{ display: 'block', marginBottom: '0.5rem' }}>Assign to?</label>
+          <label style={{ display: 'block', marginBottom: '0.5rem' }}>
+            Assign to?
+          </label>
           <select
             style={{
               display: 'block',
@@ -217,7 +315,9 @@ export function WorkspacePage() {
             {/* Add more options as needed */}
           </select>
 
-          <label style={{ display: 'block', marginBottom: '0.5rem' }}>Date range</label>
+          <label style={{ display: 'block', marginBottom: '0.5rem' }}>
+            Date range
+          </label>
           <div
             style={{
               display: 'flex',
@@ -265,9 +365,13 @@ export function WorkspacePage() {
 
       {/* Add Section Modal */}
       <Modal isOpen={isOnAddSection} onClose={() => setOnAddSection(false)}>
-        <h2 style={{ textAlign: 'center', marginBottom: '1rem' }}>Add Section</h2>
+        <h2 style={{ textAlign: 'center', marginBottom: '1rem' }}>
+          Add Section
+        </h2>
         <form>
-          <label style={{ display: 'block', marginBottom: '0.5rem' }}>Section Name</label>
+          <label style={{ display: 'block', marginBottom: '0.5rem' }}>
+            Section Name
+          </label>
           <input
             type="text"
             placeholder="Section Name"
@@ -302,9 +406,13 @@ export function WorkspacePage() {
       <Modal isOpen={isEditModalOpen} onClose={() => setIsEditModalOpen(false)}>
         {selectedActivity && (
           <>
-            <h2 style={{ textAlign: 'center', marginBottom: '1rem' }}>Edit Activity</h2>
+            <h2 style={{ textAlign: 'center', marginBottom: '1rem' }}>
+              Edit Activity
+            </h2>
             <form>
-              <label style={{ display: 'block', marginBottom: '0.5rem' }}>Activity Name</label>
+              <label style={{ display: 'block', marginBottom: '0.5rem' }}>
+                Activity Name
+              </label>
               <input
                 type="text"
                 placeholder="Activity Name"
@@ -318,7 +426,9 @@ export function WorkspacePage() {
                   border: '1px solid #ddd',
                 }}
               />
-              <label style={{ display: 'block', marginBottom: '0.5rem' }}>Description</label>
+              <label style={{ display: 'block', marginBottom: '0.5rem' }}>
+                Description
+              </label>
               <input
                 type="text"
                 placeholder="Description"

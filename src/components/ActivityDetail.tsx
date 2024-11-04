@@ -7,16 +7,14 @@ type ActivityProps = {
   title: string;
   description: string;
   owner: string;
-  startDate: string;
-  endDate: string;
+  date: string;
   onClose?: () => void;
 };
 export function ActivityDetail({
   title,
   description,
   owner: owner,
-  startDate,
-  endDate,
+  date: date,
   onClose = () => {},
 }: ActivityProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -75,7 +73,7 @@ export function ActivityDetail({
             }}
           >
             <span style={{ color: 'brown', marginRight: '0.625rem' }}>●</span>{' '}
-            Assign to{' '}
+            Onwer by:
             <a href="/" style={{ color: 'blue' }}>
               {owner}
             </a>
@@ -88,7 +86,7 @@ export function ActivityDetail({
             }}
           >
             <span style={{ color: 'brown', marginRight: '0.625rem' }}>●</span>
-            Date: {startDate} - {endDate}
+            {date}
           </li>
         </ul>
       </div>

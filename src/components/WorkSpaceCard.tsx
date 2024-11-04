@@ -1,24 +1,22 @@
-import MoreVertIcon from "@mui/icons-material/MoreVert";
-import React from "react";
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import React from 'react';
 
 interface WorkSpaceCardProps {
   projectName: string;
   description: string;
   ownerName: string;
+  onClick: () => void;
 }
 
 export function WorkSpaceCard({
   projectName,
   description,
   ownerName,
+  onClick,
 }: WorkSpaceCardProps) {
-  const handleClick = () => {
-    console.log("Component clicked!");
-  };
-
   return (
     <div
-      onClick={handleClick}
+      onClick={onClick}
       className="bg-gray-100 rounded-2xl p-4 shadow-md  h-52 cursor-pointer transition-transform duration-200 ease-in-out hover:shadow-lg active:scale-95"
     >
       <div className="h-36">

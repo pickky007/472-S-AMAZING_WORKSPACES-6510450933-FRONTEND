@@ -40,16 +40,6 @@ const navigationItems: NavigationItem[] = [
 
     path: "/home",
   },
-  {
-    label: "Projects",
-    icon: <Folder className="text-white" />,
-    path: "/projects",
-    subitems: [
-      { label: "Project 1", path: "/project-1" },
-      { label: "Project 2", path: "/project-2" },
-      { label: "Project 3", path: "/project-3" },
-    ],
-  },
 ];
 
 function Sidebar({ user }: SidebarProps) {

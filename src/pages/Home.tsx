@@ -4,12 +4,16 @@ import Modal from '../components/Modal';
 import React, { useEffect, useRef, useState } from 'react';
 import { User } from '../models/User';
 import { Workspace } from '../models/Workspace';
-import { useLocation } from 'react-router-dom';
+import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { WorkspaceService } from '../services/workspaceService';
 
-export function Home() {
-  const location = useLocation();
-  const user: User = location.state?.user;
+interface WorkspacePageProps {
+  setWorkspaceTo: (workspaceTo: Workspace) => void;
+  user: User | null; // รับ user เป็น props
+}
+
+export function Home({ setWorkspaceTo,user }: WorkspacePageProps) {
+  const navigate = useNavigate();
   const [workspaces, setWorkspace] = useState<Workspace[]>([]);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -20,13 +24,15 @@ export function Home() {
   const workspaceDescription = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    fetchWorkspaces();
-  }, []);
+    if (user) {
+      fetchWorkspaces(user.username); // ดึงข้อมูล workspace โดยใช้ username
+    }
+  }, [user]);
 
-  async function fetchWorkspaces() {
+  async function fetchWorkspaces(username:string) {
     try {
       const data = await WorkspaceService.getAllWorkspaceByUsername(
-        user.username,
+        username,
       );
       setWorkspace(data);
       console.log('Fetched WorkspacesByID:', data);
@@ -48,6 +54,11 @@ export function Home() {
     console.log(workspaceCode.current?.value);
 
     event.preventDefault();
+  }
+
+  function handleToCard(workspaceTo: Workspace) {
+    setWorkspaceTo(workspaceTo);
+    navigate('/kanbanboard', { state: { workspaceTo } });
   }
 
   return (
@@ -88,6 +99,9 @@ export function Home() {
               projectName={workspace.name}
               description={workspace.description || 'No description available'}
               ownerName={workspace.owner}
+              onClick={() => {
+                handleToCard(workspace);
+              }}
             />
           ))
         )}

@@ -29,7 +29,7 @@ export class WorkspaceService {
     }
 
 
-    static async joinWorkspace(username: string, workspace_id: number): Promise<Workspace> {
+    static async joinWorkspace(username: string, workspace_id: string): Promise<Workspace> {
         try {
             const response = await axios.post<IWorkspaceResponse>(ENDPOINTS.WORKSPACE.JOIN(username, workspace_id));
             return Workspace.fromResponse(response.data);
