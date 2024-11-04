@@ -28,17 +28,15 @@ export function LoginPage({ setIsAuthenticated, setUser }: LoginPageProps) {
   const [users, setUsers] = useState<User[]>([]);
 
   function handleSignIn() {
-    // Create user object based on the input data
     const userData: IUserResponse = {
       username: 'user1',
       first_name: 'John',
       last_name: 'Doe',
     };
 
-    const user = User.fromResponse(userData); // Create User instance
+    const user = User.fromResponse(userData);
     setIsAuthenticated(true);
 
-    // Navigate and pass the User object in state
     setUser(user);
     navigate('/', { state: { user } });
   }
@@ -51,7 +49,7 @@ export function LoginPage({ setIsAuthenticated, setUser }: LoginPageProps) {
     try {
       const data = await UserService.getUsers();
       setUsers(data);
-      console.log('Fetched User:', data); // ดูค่าที่ถูกตั้งใหม่
+      console.log('Fetched User:', data);
     } catch (err) {
       console.error(err);
     }
