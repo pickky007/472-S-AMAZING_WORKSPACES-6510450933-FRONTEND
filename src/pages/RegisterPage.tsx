@@ -1,15 +1,15 @@
-import { Button, TextField } from "@mui/material";
-import { useState } from "react";
-import { PasswordField } from "../components/PasswordField";
-import React from "react";
+import { Button, TextField } from '@mui/material';
+import { useState } from 'react';
+import { PasswordField } from '../components/PasswordField';
+import React from 'react';
 
 export function RegisterPage() {
-  const [username, setUsername] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [error, setError] = useState("");
+  const [username, setUsername] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [error, setError] = useState('');
 
   function handleUsernameChange(event: React.ChangeEvent<HTMLInputElement>) {
     setUsername(event.target.value);
@@ -31,9 +31,7 @@ export function RegisterPage() {
     setConfirmPassword(newValue);
   }
 
-  function handleRegisterClick() {
-    console.log("Hello World");
-  }
+  function handleRegisterClick() {}
 
   return (
     <div className="flex flex-col  items-center justify-center h-screen bg-gradient-to-r from-[#CDF3F5] to-[#448386]">
@@ -88,10 +86,10 @@ export function RegisterPage() {
             variant="contained"
             onClick={handleRegisterClick}
             sx={{
-              backgroundColor: "#448386",
-              color: "white",
-              width: "300px",
-              "&:hover": { backgroundColor: "#9ABCA9" },
+              backgroundColor: '#448386',
+              color: 'white',
+              width: '300px',
+              '&:hover': { backgroundColor: '#9ABCA9' },
             }}
           >
             Register

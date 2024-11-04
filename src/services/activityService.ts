@@ -13,10 +13,23 @@ export class ActivityService {
       const response = await axios.get<IActivityResponse[]>(
         ENDPOINTS.WORKSPACE.GET_ACTIVITIES(workspaceId, sectionId),
       );
-      console.log(response.data);
+
+      // ตรวจสอบว่ามีข้อมูลใน response.data หรือไม่
+      if (!response.data || response.data.length === 0) {
+        console.warn(
+          `No activities found for sectionId: ${sectionId} in workspaceId: ${workspaceId}`,
+        );
+        return []; // ส่งกลับอาร์เรย์ว่างถ้าไม่มีข้อมูล
+      }
+
+      // หากมีข้อมูล กำหนดแปลงข้อมูล
       return response.data.map((activity) => Activity.fromResponse(activity));
     } catch (error) {
-      throw new Error('Failed to fetch activities');
+      console.error(
+        `Error fetching activities for section ${sectionId} in workspace ${workspaceId}:`,
+        error,
+      );
+      throw new Error('Failed to fetch activities'); // คุณสามารถโยนข้อผิดพลาดนี้ได้ตามต้องการ
     }
   }
 

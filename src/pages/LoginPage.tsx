@@ -49,7 +49,6 @@ export function LoginPage({ setIsAuthenticated, setUser }: LoginPageProps) {
     try {
       const data = await UserService.getUsers();
       setUsers(data);
-      console.log('Fetched User:', data);
     } catch (err) {
       console.error(err);
     }

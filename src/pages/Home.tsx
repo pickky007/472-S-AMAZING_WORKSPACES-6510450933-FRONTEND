@@ -10,10 +10,10 @@ import { IWorkspaceCreate } from '../types/workspace.types';
 
 interface WorkspacePageProps {
   setWorkspaceTo: (workspaceTo: Workspace) => void;
-  user: User 
+  user: User;
 }
 
-export function Home({ setWorkspaceTo,user }: WorkspacePageProps) {
+export function Home({ setWorkspaceTo, user }: WorkspacePageProps) {
   const navigate = useNavigate();
   const [workspaces, setWorkspace] = useState<Workspace[]>([]);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -30,13 +30,10 @@ export function Home({ setWorkspaceTo,user }: WorkspacePageProps) {
     }
   }, [user]);
 
-  async function fetchWorkspaces(username:string) {
+  async function fetchWorkspaces(username: string) {
     try {
-      const data = await WorkspaceService.getAllWorkspaceByUsername(
-        username,
-      );
+      const data = await WorkspaceService.getAllWorkspaceByUsername(username);
       setWorkspace(data);
-      console.log('Fetched WorkspacesByID:', data);
     } catch (err) {
       console.error(err);
     } finally {
@@ -45,34 +42,32 @@ export function Home({ setWorkspaceTo,user }: WorkspacePageProps) {
   }
 
   function handleCreate(event: React.FormEvent) {
-    console.log(workspaceName.current?.value);
-    console.log(workspaceDescription.current?.value);
-
-    let workspace : IWorkspaceCreate = {
+    let workspace: IWorkspaceCreate = {
       name: workspaceName.current?.value!,
       description: workspaceDescription.current?.value,
-      owner: user.username
-    }
-    WorkspaceService.createWorkspace(workspace).then((r)=>{
-      fetchWorkspaces(user?.username);
-      setIsModalOpen(false);
-      console.log(r);
-    }).catch((err)=>{alert(JSON.stringify(err));});
-    
+      owner: user.username,
+    };
+    WorkspaceService.createWorkspace(workspace)
+      .then((r) => {
+        fetchWorkspaces(user?.username);
+        setIsModalOpen(false);
+      })
+      .catch((err) => {
+        alert(JSON.stringify(err));
+      });
+
     event.preventDefault();
   }
 
   function handleJoin(event: React.FormEvent) {
-    console.log(workspaceCode.current?.value);
-
-    WorkspaceService.joinWorkspace(user.username, workspaceCode.current?.value!).then((r)=>{
-      fetchWorkspaces(user.username);
-      setIsJoinModalOpen(false);
-      console.log(JSON.stringify(r));
-    }).catch((err) => {
-      alert("Unable to join workspace for some reason");
-      console.log(err);
-    });
+    WorkspaceService.joinWorkspace(user.username, workspaceCode.current?.value!)
+      .then((r) => {
+        fetchWorkspaces(user.username);
+        setIsJoinModalOpen(false);
+      })
+      .catch((err) => {
+        alert('Unable to join workspace for some reason');
+      });
 
     event.preventDefault();
   }

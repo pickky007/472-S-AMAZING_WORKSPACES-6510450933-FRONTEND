@@ -1,16 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { SectionCard } from '../components/SectionCard';
 import { SectionService } from '../services/sectionService';
 import { ActivityService } from '../services/activityService';
 import {
   ISectionCard as SectionType,
   IActivityCard,
+  IActivityCreate,
 } from '../components/types';
 import Modal from '../components/Modal';
 import { ActivityDetail } from '../components/ActivityDetail';
 import { Section } from '../models/Section';
 import { Activity } from '../models/Activity';
 import { Workspace } from '../models/Workspace';
+import { WorkspaceService } from '../services/workspaceService';
+import { ISectionCreate } from '../types/section.types';
 
 type ActivityType = {
   id: string;
@@ -41,8 +44,13 @@ export function WorkspacePage({ workspaceTo }: { workspaceTo: Workspace }) {
   const [isOnAddActivity, setOnAddActivity] = useState<boolean>(false);
   const [isOnAddSection, setOnAddSection] = useState<boolean>(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
+  const sectionName = useRef<HTMLInputElement>(null);
+  const activityName = useRef<HTMLInputElement>(null);
+  const description = useRef<HTMLInputElement>(null);
+  const sDate = useRef<HTMLInputElement>(null);
+  const eDate = useRef<HTMLInputElement>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
+  const [selectSecId, setSelectSecId] = useState(Number);
   const fetchData = async () => {
     try {
       const sectionData: Section[] =
@@ -84,8 +92,6 @@ export function WorkspacePage({ workspaceTo }: { workspaceTo: Workspace }) {
               const minutes = String(date.getMinutes()).padStart(2, '0');
               return `${year}-${month}-${day} ${hours}:${minutes}:00`; // สตริงที่จัดรูปแบบ
             };
-
-            console.log(activity.startDate); // สำหรับการดีบัก
 
             return {
               id: activityKey,
@@ -193,6 +199,51 @@ export function WorkspacePage({ workspaceTo }: { workspaceTo: Workspace }) {
     }
   }
 
+  function handleCreateSection(event: React.FormEvent) {
+    let sec: ISectionCreate = {
+      workspace_id: workspaceTo.id,
+      name: sectionName.current?.value!,
+    };
+    SectionService.createSection(sec)
+      .then((r) => {
+        fetchData();
+        setOnAddSection(false);
+      })
+      .catch((err) => {
+        alert(JSON.stringify(err));
+      });
+
+    event.preventDefault();
+  }
+
+  function handleCreateActivity(event: React.FormEvent) {
+    let act: IActivityCreate = {
+      workspace_id: workspaceTo.id,
+      name: activityName.current?.value!,
+      description: description.current?.value!,
+      start_date: sDate.current?.value!,
+      end_date: eDate.current?.value!,
+      section_id: selectSecId,
+    };
+
+    ActivityService.createActivity(act)
+      .then((r) => {
+        fetchData();
+        setOnAddSection(false);
+      })
+      .catch((err) => {
+        alert(JSON.stringify(err));
+      });
+
+    setOnAddActivity(false);
+    event.preventDefault();
+  }
+
+  function setModalActivity(sec: number) {
+    setSelectSecId(sec);
+    setOnAddActivity(true);
+  }
+
   // ... ส่วนที่เหลือของ component (render, modals, etc.) ...
 
   return (
@@ -234,7 +285,9 @@ export function WorkspacePage({ workspaceTo }: { workspaceTo: Workspace }) {
                 activities={section.activities}
                 onDrop={handleDrop}
                 onDragStart={handleDragStart}
-                setOnAddActivity={setOnAddActivity}
+                handleOnAddOptionClick={() => {
+                  setModalActivity(section.rawId);
+                }}
                 onActivityClick={handleActivityClick}
                 onEditClick={() => setIsEditModalOpen(true)}
               />
@@ -265,12 +318,13 @@ export function WorkspacePage({ workspaceTo }: { workspaceTo: Workspace }) {
         <h2 style={{ textAlign: 'center', marginBottom: '1rem' }}>
           Add Activity
         </h2>
-        <form>
+        <form onSubmit={handleCreateActivity}>
           <label style={{ display: 'block', marginBottom: '0.5rem' }}>
             Activity name
           </label>
           <input
             type="text"
+            ref={activityName}
             placeholder="Activity name"
             style={{
               display: 'block',
@@ -287,6 +341,7 @@ export function WorkspacePage({ workspaceTo }: { workspaceTo: Workspace }) {
           </label>
           <input
             type="text"
+            ref={description}
             placeholder="Description"
             style={{
               display: 'block',
@@ -297,23 +352,6 @@ export function WorkspacePage({ workspaceTo }: { workspaceTo: Workspace }) {
               border: '1px solid #ddd',
             }}
           />
-
-          <label style={{ display: 'block', marginBottom: '0.5rem' }}>
-            Assign to?
-          </label>
-          <select
-            style={{
-              display: 'block',
-              marginBottom: '1rem',
-              width: '100%',
-              padding: '0.5rem',
-              borderRadius: '0.25rem',
-              border: '1px solid #ddd',
-            }}
-          >
-            <option>Person</option>
-            {/* Add more options as needed */}
-          </select>
 
           <label style={{ display: 'block', marginBottom: '0.5rem' }}>
             Date range
@@ -327,6 +365,7 @@ export function WorkspacePage({ workspaceTo }: { workspaceTo: Workspace }) {
           >
             <input
               type="date"
+              ref={sDate}
               style={{
                 width: '48%',
                 padding: '0.5rem',
@@ -336,6 +375,7 @@ export function WorkspacePage({ workspaceTo }: { workspaceTo: Workspace }) {
             />
             <input
               type="date"
+              ref={eDate}
               style={{
                 width: '48%',
                 padding: '0.5rem',
@@ -368,12 +408,13 @@ export function WorkspacePage({ workspaceTo }: { workspaceTo: Workspace }) {
         <h2 style={{ textAlign: 'center', marginBottom: '1rem' }}>
           Add Section
         </h2>
-        <form>
+        <form onSubmit={handleCreateSection}>
           <label style={{ display: 'block', marginBottom: '0.5rem' }}>
             Section Name
           </label>
           <input
             type="text"
+            ref={sectionName}
             placeholder="Section Name"
             style={{
               display: 'block',
@@ -385,11 +426,9 @@ export function WorkspacePage({ workspaceTo }: { workspaceTo: Workspace }) {
             }}
           />
           <button
-          onClick={(e) =>{ 
-            
-            e.stopPropagation();
-            console.log("submit");
-          }}  
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
             type="submit"
             style={{
               display: 'block',
@@ -403,7 +442,6 @@ export function WorkspacePage({ workspaceTo }: { workspaceTo: Workspace }) {
             }}
           >
             Save
-            
           </button>
         </form>
       </Modal>
