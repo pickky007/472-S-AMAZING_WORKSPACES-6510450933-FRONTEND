@@ -50,13 +50,23 @@ export function Home() {
     WorkspaceService.createWorkspace(workspace).then((r)=>{
       fetchWorkspaces();
       setIsModalOpen(false);
-    });
+      console.log(r);
+    }).catch((err)=>{alert(JSON.stringify(err));});
     
     event.preventDefault();
   }
 
   function handleJoin(event: React.FormEvent) {
     console.log(workspaceCode.current?.value);
+
+    WorkspaceService.joinWorkspace(user.username, workspaceCode.current?.value!).then((r)=>{
+      fetchWorkspaces();
+      setIsJoinModalOpen(false);
+      console.log(JSON.stringify(r));
+    }).catch((err) => {
+      alert("Unable to join workspace for some reason");
+      console.log(err);
+    });
 
     event.preventDefault();
   }
