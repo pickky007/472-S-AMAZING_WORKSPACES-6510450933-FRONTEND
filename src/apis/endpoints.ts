@@ -21,5 +21,7 @@ export const ENDPOINTS = {
     MOVE_ACTIVITY: (workspace_id: string) => `/workspaces/${workspace_id}/activities/move`,
     EDIT_ACTIVITY: (workspace_id: string, section_id: number, activity_id: number) => `/workspaces/${workspace_id}/${section_id}/activities/${activity_id}/edit`,
     EDIT_SECTION: (workspace_id: string, section_id: number) => `/workspaces/${workspace_id}/${section_id}/edit`,
+    LOGIN: ()=> `/login`,
+    REGISTER: ()=> `/register`,
   },
 };
