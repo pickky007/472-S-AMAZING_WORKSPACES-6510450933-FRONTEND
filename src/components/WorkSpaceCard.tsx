@@ -1,8 +1,6 @@
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { IconButton } from "material-ui";
 import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Modal from "./Modal";
 
 interface WorkSpaceCardProps {
   projectName: string;
