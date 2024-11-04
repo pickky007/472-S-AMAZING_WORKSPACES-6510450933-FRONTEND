@@ -11,6 +11,9 @@ export class SectionService {
     try {
       const response = await axios.get<ISectionResponse[]>(
         ENDPOINTS.WORKSPACE.GET_SECTIONS(workspaceId),
+        {
+          withCredentials: true,
+        },
       );
       return response.data.map((section) => Section.fromResponse(section));
     } catch (error) {
@@ -23,7 +26,13 @@ export class SectionService {
    */
   static async createSection(section: ISectionCreate): Promise<Section> {
     try {
-      const response = await axios.post<ISectionResponse>(ENDPOINTS.WORKSPACE.CREATE_SECTION(section.workspace_id), {name: section.name});
+      const response = await axios.post<ISectionResponse>(
+        ENDPOINTS.WORKSPACE.CREATE_SECTION(section.workspace_id),
+        { name: section.name },
+        {
+          withCredentials: true,
+        },
+      );
       return Section.fromResponse(response.data);
     } catch (error) {
       throw new Error('Failed to create section');
@@ -33,11 +42,21 @@ export class SectionService {
   /**
    * @param section **ต้องกำหนด section.workspace_id มาด้วย**
    */
-  static async editSection(workspace_id: string, section_id: number, new_name: string): Promise<Section> {
+  static async editSection(
+    workspace_id: string,
+    section_id: number,
+    new_name: string,
+  ): Promise<Section> {
     try {
-      const response = await axios.post<ISectionResponse>(ENDPOINTS.WORKSPACE.EDIT_SECTION(workspace_id, section_id), {
-        new_name: new_name
-      });
+      const response = await axios.post<ISectionResponse>(
+        ENDPOINTS.WORKSPACE.EDIT_SECTION(workspace_id, section_id),
+        {
+          new_name: new_name,
+        },
+        {
+          withCredentials: true,
+        },
+      );
       return Section.fromResponse(response.data);
     } catch (error) {
       throw new Error('Failed to edit section');

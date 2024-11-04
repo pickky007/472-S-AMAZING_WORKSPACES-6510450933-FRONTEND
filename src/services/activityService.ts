@@ -12,6 +12,9 @@ export class ActivityService {
     try {
       const response = await axios.get<IActivityResponse[]>(
         ENDPOINTS.WORKSPACE.GET_ACTIVITIES(workspaceId, sectionId),
+        {
+          withCredentials: true,
+        },
       );
 
       // ตรวจสอบว่ามีข้อมูลใน response.data หรือไม่
@@ -41,6 +44,9 @@ export class ActivityService {
           activity.section_id,
         ),
         activity,
+        {
+          withCredentials: true,
+        },
       );
       return Activity.fromResponse(response.data);
     } catch (error) {
@@ -59,6 +65,9 @@ export class ActivityService {
         {
           new_section_id: to_section_id,
           activity_id: activity_id,
+        },
+        {
+          withCredentials: true,
         },
       );
       return response.data;
@@ -85,6 +94,9 @@ export class ActivityService {
           description: activity.description,
           start_date: activity.start_date,
           end_date: activity.end_date,
+        },
+        {
+          withCredentials: true,
         },
       );
       return Activity.fromResponse(response.data);
