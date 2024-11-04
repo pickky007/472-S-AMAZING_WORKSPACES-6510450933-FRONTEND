@@ -1,5 +1,6 @@
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 interface WorkSpaceCardProps {
   projectName: string;
@@ -12,8 +13,11 @@ export function WorkSpaceCard({
   description,
   ownerName,
 }: WorkSpaceCardProps) {
+  
+  const navigate = useNavigate();
+
   const handleClick = () => {
-    console.log("Component clicked!");
+    navigate(`/kanbanboard`); 
   };
 
   return (
