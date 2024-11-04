@@ -10,6 +10,6 @@ export const ENDPOINTS = {
     },
     WORKSPACE: {
         GET_BY_USERNAME: (username: string) => `/users/${username}/workspaces`,
-        CREATE: '/workspaces'
+        CREATE: (username: string, ) => `/users/${username}/workspaces/create`,
     },
 };

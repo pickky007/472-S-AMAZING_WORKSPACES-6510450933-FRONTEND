@@ -14,10 +14,14 @@ export class WorkspaceService {
         }
     }
 
-    // ฟังก์ชันสร้าง workspace ใหม่
+    /**
+     * ฟังก์ชันสร้าง workspace ใหม่
+     * @param workspaceData ต้องกำหนด owner
+     * @returns 
+     */
     static async createWorkspace(workspaceData: IWorkspaceCreate): Promise<Workspace> {
         try {
-            const response = await axios.post<IWorkspaceResponse>(ENDPOINTS.WORKSPACE.CREATE, workspaceData);
+            const response = await axios.post<IWorkspaceResponse>(ENDPOINTS.WORKSPACE.CREATE(workspaceData.owner), workspaceData);
             return Workspace.fromResponse(response.data);
         } catch (error) {
             throw new Error('Failed to create workspace');
