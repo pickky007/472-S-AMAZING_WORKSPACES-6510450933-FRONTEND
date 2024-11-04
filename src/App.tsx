@@ -24,7 +24,7 @@ function App() {
               path="/"
               element={
                 isAuthenticated ? (
-                  <Home setWorkspaceTo={setWorkspaceTo} user={user} />
+                  <Home setWorkspaceTo={setWorkspaceTo} user={user!} />
                 ) : (
                   <LoginPage
                     setUser={setUser}
@@ -35,7 +35,7 @@ function App() {
             />
             <Route
               path="/Home"
-              element={<Home setWorkspaceTo={setWorkspaceTo} user={user} />}
+              element={<Home setWorkspaceTo={setWorkspaceTo} user={user!} />}
             />
             <Route path="/news-feed" element={<div>News Feed Page</div>} />
             <Route

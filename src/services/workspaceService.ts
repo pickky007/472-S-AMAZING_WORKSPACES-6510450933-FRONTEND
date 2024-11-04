@@ -34,7 +34,7 @@ export class WorkspaceService {
             const response = await axios.post<IWorkspaceResponse>(ENDPOINTS.WORKSPACE.JOIN(username, workspace_id));
             return Workspace.fromResponse(response.data);
         } catch (error) {
-            throw new Error('Failed to create workspace');
+            throw error;
         }
     }
 }

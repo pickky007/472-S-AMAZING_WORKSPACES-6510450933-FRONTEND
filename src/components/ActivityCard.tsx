@@ -37,7 +37,7 @@ export function ActivityCard({
         <p className="text-gray-600 mb-3">{activity.description}</p>
         <div className="flex flex-col gap-1">
           <span className="flex items-center text-sm text-gray-600">
-            Assign to{' '}
+            Owner 
             <span className="text-emerald-700 ml-1">{activity.owner}</span>
           </span>
           <span className="flex items-center text-sm text-gray-600">

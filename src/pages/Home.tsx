@@ -6,10 +6,11 @@ import { User } from '../models/User';
 import { Workspace } from '../models/Workspace';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { WorkspaceService } from '../services/workspaceService';
+import { IWorkspaceCreate } from '../types/workspace.types';
 
 interface WorkspacePageProps {
   setWorkspaceTo: (workspaceTo: Workspace) => void;
-  user: User | null; // รับ user เป็น props
+  user: User 
 }
 
 export function Home({ setWorkspaceTo,user }: WorkspacePageProps) {
@@ -47,11 +48,31 @@ export function Home({ setWorkspaceTo,user }: WorkspacePageProps) {
     console.log(workspaceName.current?.value);
     console.log(workspaceDescription.current?.value);
 
+    let workspace : IWorkspaceCreate = {
+      name: workspaceName.current?.value!,
+      description: workspaceDescription.current?.value,
+      owner: user.username
+    }
+    WorkspaceService.createWorkspace(workspace).then((r)=>{
+      fetchWorkspaces(user?.username);
+      setIsModalOpen(false);
+      console.log(r);
+    }).catch((err)=>{alert(JSON.stringify(err));});
+    
     event.preventDefault();
   }
 
   function handleJoin(event: React.FormEvent) {
     console.log(workspaceCode.current?.value);
+
+    WorkspaceService.joinWorkspace(user.username, workspaceCode.current?.value!).then((r)=>{
+      fetchWorkspaces(user.username);
+      setIsJoinModalOpen(false);
+      console.log(JSON.stringify(r));
+    }).catch((err) => {
+      alert("Unable to join workspace for some reason");
+      console.log(err);
+    });
 
     event.preventDefault();
   }
@@ -102,6 +123,7 @@ export function Home({ setWorkspaceTo,user }: WorkspacePageProps) {
               onClick={() => {
                 handleToCard(workspace);
               }}
+              id={workspace.id}
             />
           ))
         )}

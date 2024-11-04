@@ -385,6 +385,11 @@ export function WorkspacePage({ workspaceTo }: { workspaceTo: Workspace }) {
             }}
           />
           <button
+          onClick={(e) =>{ 
+            
+            e.stopPropagation();
+            console.log("submit");
+          }}  
             type="submit"
             style={{
               display: 'block',
@@ -398,6 +403,7 @@ export function WorkspacePage({ workspaceTo }: { workspaceTo: Workspace }) {
             }}
           >
             Save
+            
           </button>
         </form>
       </Modal>
