@@ -34,4 +34,18 @@ export class ActivityService {
             throw new Error('Failed to move activity');
         }
     }
+
+    static async editActivity(workspace_id: number, section_id: number, activity_id: number, activity: IActivityCreate): Promise<Activity> {
+        try {
+            const response = await axios.post(ENDPOINTS.WORKSPACE.EDIT_ACTIVITY(workspace_id, section_id, activity_id), {
+                name: activity.name,
+                description: activity.description,
+                start_date: activity.start_date,
+                end_date: activity.end_date
+            });
+            return Activity.fromResponse(response.data);
+        } catch (error) {
+            throw new Error('Failed to move activity');
+        }
+    }
 }

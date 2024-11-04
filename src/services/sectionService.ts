@@ -29,4 +29,18 @@ export class SectionService {
       throw new Error('Failed to create section');
     }
   }
+
+  /**
+   * @param section **ต้องกำหนด section.workspace_id มาด้วย**
+   */
+  static async editSection(workspace_id: number, section_id: number, new_name: string): Promise<Section> {
+    try {
+      const response = await axios.post<ISectionResponse>(ENDPOINTS.WORKSPACE.EDIT_SECTION(workspace_id, section_id), {
+        new_name: new_name
+      });
+      return Section.fromResponse(response.data);
+    } catch (error) {
+      throw new Error('Failed to edit section');
+    }
+  }
 }
