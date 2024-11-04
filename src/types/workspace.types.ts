@@ -1,5 +1,5 @@
 export interface IWorkspaceResponse {
-    id: number;
+    id: string;
     name: string;
     description?: string; // optional
     owner: string;

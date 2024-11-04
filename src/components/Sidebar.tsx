@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Box,
   List,
@@ -8,7 +8,7 @@ import {
   ListItemText,
   Typography,
   Collapse,
-} from "@mui/material";
+} from '@mui/material';
 import {
   Dashboard,
   Folder,
@@ -16,8 +16,9 @@ import {
   ExpandLess,
   Logout,
   Home,
-} from "@mui/icons-material";
-import { User } from "../models/User";
+} from '@mui/icons-material';
+import { User } from '../models/User';
+import { IUserLogin } from '../types/user.types';
 
 interface NavigationItem {
   label: string;
@@ -30,34 +31,20 @@ interface NavigationItem {
 }
 
 interface SidebarProps {
-  user: User | null; // Accept the User or null if not authenticated
+  user: IUserLogin | null; // Accept the User or null if not authenticated
+  setIsAuthenticated: (isAuthenticated: boolean) => void;
 }
 
 const navigationItems: NavigationItem[] = [
   {
-    label: "Home",
+    label: 'Home',
     icon: <Home className="text-white" />,
 
-    path: "/home",
-  },
-  {
-    label: "Kanbanboard",
-    icon: <Dashboard className="text-white" />,
-    path: "/kanbanboard",
-  },
-  {
-    label: "Projects",
-    icon: <Folder className="text-white" />,
-    path: "/projects",
-    subitems: [
-      { label: "Project 1", path: "/project-1" },
-      { label: "Project 2", path: "/project-2" },
-      { label: "Project 3", path: "/project-3" },
-    ],
+    path: '/home',
   },
 ];
 
-function Sidebar({ user }: SidebarProps) {
+function Sidebar({ user, setIsAuthenticated }: SidebarProps) {
   const navigate = useNavigate();
   const [expandedItem, setExpandedItem] = useState<string | null>(null);
 
@@ -65,7 +52,7 @@ function Sidebar({ user }: SidebarProps) {
     if (item.subitems) {
       setExpandedItem(expandedItem === item.label ? null : item.label);
     } else {
-      if (item.path === "/home") {
+      if (item.path === '/home') {
         navigate(item.path, { state: { user } }); // Pass user data as state
       } else {
         navigate(item.path);
@@ -78,10 +65,8 @@ function Sidebar({ user }: SidebarProps) {
   }
 
   function handleLogout() {
-    // เพิ่ม logic การ logout ที่นี่
-    console.log("Logging out...");
-    // ตัวอย่างเช่น:
-    // logout().then(() => navigate('/login'));
+    setIsAuthenticated(false);
+    navigate('/');
   }
 
   return (

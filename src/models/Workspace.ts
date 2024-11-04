@@ -1,7 +1,7 @@
 import { IWorkspaceResponse,IWorkspaceCreate } from "../types/workspace.types";
 
 export class Workspace {
-    id: number;
+    id: string;
     name: string;
     description?: string;
     owner:string;

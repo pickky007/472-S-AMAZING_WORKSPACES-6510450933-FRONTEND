@@ -1,5 +1,5 @@
+# ku-cs471-project-aws-frontend
 ## Web Application: AWS (Amazing Work Space)
-
 ### Features
 1. **Login**: ยืนยัน user เพื่อเข้าใช้งาน
 2. **Register**: สร้าง new user
@@ -16,14 +16,11 @@
      - **Description**: ทำการออกแบบ interface
      - **Start Date**: วันที่และเวลาที่สร้าง activity
      - **End Date**: วันที่และเวลาที่ทำเสร็จ
-
 ## Frontend
-
 ### ติดตั้ง Dependencies
 ใช้คำสั่งต่อไปนี้เพื่อติดตั้งแพ็กเกจที่ระบุไว้ในไฟล์ `package.json` ของโปรเจกต์: npm instarll
 ### Run
 ใช้คำสั่งต่อไปนี้เพื่อ run program : npm start
-
 ## จัดทำโดย  
 นาย ธนโชติ งามคณะ  6510450411  
 นาย ธนธัส สุวรรณ์  6510450429  

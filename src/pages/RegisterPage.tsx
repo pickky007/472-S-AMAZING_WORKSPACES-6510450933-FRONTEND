@@ -1,15 +1,19 @@
-import { Button, TextField } from "@mui/material";
-import { useState } from "react";
-import { PasswordField } from "../components/PasswordField";
-import React from "react";
+import { Button, TextField } from '@mui/material';
+import { useState } from 'react';
+import { PasswordField } from '../components/PasswordField';
+import React from 'react';
+import { IUserCreate } from '../types/user.types';
+import { UserService } from '../services/userService';
+import { useNavigate } from 'react-router-dom';
 
 export function RegisterPage() {
-  const [username, setUsername] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [error, setError] = useState("");
+  const navigate = useNavigate();
+  const [username, setUsername] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [error, setError] = useState('');
 
   function handleUsernameChange(event: React.ChangeEvent<HTMLInputElement>) {
     setUsername(event.target.value);
@@ -31,8 +35,20 @@ export function RegisterPage() {
     setConfirmPassword(newValue);
   }
 
-  function handleRegisterClick() {
-    console.log("Hello World");
+  async function handleRegisterClick() {
+    let userRegis: IUserCreate = {
+      username: username,
+      first_name: firstName,
+      last_name: lastName,
+      password: password,
+    };
+
+    try {
+      await UserService.register(userRegis);
+      navigate('/'); // Navigate to home on success
+    } catch (err) {
+      alert('Registration failed: ' + JSON.stringify(err));
+    }
   }
 
   return (
@@ -81,17 +97,15 @@ export function RegisterPage() {
             value={confirmPassword}
           />
         </div>
-        <div>{username}</div>
-
         <div className="flex flex-col items-center justify-between w-full mt-2 ">
           <Button
             variant="contained"
             onClick={handleRegisterClick}
             sx={{
-              backgroundColor: "#448386",
-              color: "white",
-              width: "300px",
-              "&:hover": { backgroundColor: "#9ABCA9" },
+              backgroundColor: '#448386',
+              color: 'white',
+              width: '300px',
+              '&:hover': { backgroundColor: '#9ABCA9' },
             }}
           >
             Register

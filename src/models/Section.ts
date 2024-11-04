@@ -2,7 +2,7 @@ import { ISectionResponse, ISectionCreate } from "../types/section.types";
 
 export class Section {
     id: number;
-    workspaceId: number;
+    workspaceId: string;
     name: string;
 
     constructor(data: ISectionResponse) {
