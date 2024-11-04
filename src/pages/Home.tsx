@@ -6,6 +6,7 @@ import { User } from '../models/User';
 import { Workspace } from '../models/Workspace';
 import { useLocation } from 'react-router-dom';
 import { WorkspaceService } from '../services/workspaceService';
+import { IWorkspaceCreate } from '../types/workspace.types';
 
 export function Home() {
   const location = useLocation();
@@ -41,6 +42,16 @@ export function Home() {
     console.log(workspaceName.current?.value);
     console.log(workspaceDescription.current?.value);
 
+    let workspace : IWorkspaceCreate = {
+      name: workspaceName.current?.value!,
+      description: workspaceDescription.current?.value,
+      owner: user.username
+    }
+    WorkspaceService.createWorkspace(workspace).then((r)=>{
+      fetchWorkspaces();
+      setIsModalOpen(false);
+    });
+    
     event.preventDefault();
   }
 
