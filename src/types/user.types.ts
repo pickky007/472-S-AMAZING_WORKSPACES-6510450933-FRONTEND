@@ -5,6 +5,7 @@ export interface IUserResponse {
 }
 
 export interface IUserCreate {
+  username: string;
   first_name: string;
   last_name: string;
   password: string;

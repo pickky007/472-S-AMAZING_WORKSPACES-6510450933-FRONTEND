@@ -53,4 +53,22 @@ export class UserService {
       throw new Error('Failed to delete user');
     }
   }
+
+  static async login(username: string, password: string): Promise<any> {
+    try {
+      await axios.post(ENDPOINTS.USER.LOGIN, {
+        // request body here!
+      });
+    } catch (error) {
+      throw new Error('Failed to login');
+    }
+  }
+
+  static async register(user: IUserCreate): Promise<any> {
+    try {
+      await axios.post(ENDPOINTS.USER.REGISTER, user);
+    } catch (error) {
+      throw new Error('Failed to login');
+    }
+  }
 }
