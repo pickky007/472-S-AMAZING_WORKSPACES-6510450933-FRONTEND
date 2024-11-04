@@ -12,52 +12,48 @@ export function Home() {
   const user: User = location.state?.user;
   const [workspaces, setWorkspace] = useState<Workspace[]>([]);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [isJoinModalOpen, setIsJoinModalOpen] = useState<boolean>(false);
 
   const workspaceName = useRef<HTMLInputElement>(null);
   const workspaceCode = useRef<HTMLInputElement>(null);
   const workspaceDescription = useRef<HTMLInputElement>(null);
 
-
-
-  
-
   useEffect(() => {
-    fetchWorkspace();
+    fetchWorkspaces();
   }, []);
 
-  async function fetchWorkspace() {
+  async function fetchWorkspaces() {
     try {
       const data = await WorkspaceService.getAllWorkspaceByUsername(
         user.username,
       );
-      console.log(user);
       setWorkspace(data);
       console.log('Fetched WorkspacesByID:', data);
     } catch (err) {
       console.error(err);
+    } finally {
+      setIsLoading(false);
     }
   }
 
   function handleCreate(event: React.FormEvent) {
-    console.log(workspaceName.current?.value)
-    console.log(workspaceDescription.current?.value)
-    
-    event.preventDefault();    
+    console.log(workspaceName.current?.value);
+    console.log(workspaceDescription.current?.value);
+
+    event.preventDefault();
   }
 
   function handleJoin(event: React.FormEvent) {
-    console.log(workspaceCode.current?.value)
+    console.log(workspaceCode.current?.value);
 
-    
-    event.preventDefault();    
+    event.preventDefault();
   }
-
 
   return (
     <div className="p-5 flex flex-col">
       <div className="flex justify-end mb-2">
-      <Button
+        <Button
           onClick={() => setIsJoinModalOpen(true)}
           sx={{
             backgroundColor: '#448386',
@@ -80,50 +76,29 @@ export function Home() {
         >
           New Workspace
         </Button>
-
-        
       </div>
       <div className="bg-gray-400 h-px w-full mb-5" />
       <div className="grid grid-cols-3 gap-x-20 gap-y-16 justify-center">
-        <WorkSpaceCard
-          projectName="WorkspaceA"
-          description="This is WorkspaceA"
-          ownerName="Cat 1"
-        />
-        <WorkSpaceCard
-          projectName="WorkspaceB"
-          description="This is WorkspaceB"
-          ownerName="Cat 1"
-        />
-        <WorkSpaceCard
-          projectName="WorkspaceC"
-          description="This is WorkspaceC"
-          ownerName="Cat 1"
-        />
-        <WorkSpaceCard
-          projectName="WorkspaceD"
-          description="This is WorkspaceD"
-          ownerName="Cat 1"
-        />
-        <WorkSpaceCard
-          projectName="WorkspaceE"
-          description="This is WorkspaceE"
-          ownerName="Cat 1"
-        />
-        <WorkSpaceCard
-          projectName="WorkspaceF"
-          description="This is WorkspaceF"
-          ownerName="Cat 1"
-        />
+        {isLoading ? (
+          <p>Loading workspaces...</p>
+        ) : (
+          workspaces.map((workspace) => (
+            <WorkSpaceCard
+              key={workspace.id}
+              projectName={workspace.name}
+              description={workspace.description || 'No description available'}
+              ownerName={workspace.owner}
+            />
+          ))
+        )}
       </div>
-      
+
       <Modal isOpen={isJoinModalOpen} onClose={() => setIsJoinModalOpen(false)}>
         <h2 className="text-center mb-4">Join workspaces</h2>
         <form onSubmit={handleJoin}>
           <label className="block mb-2">Workspace code</label>
-  
+
           <input
-          
             type="text"
             ref={workspaceCode}
             placeholder="Enter code"
@@ -139,10 +114,10 @@ export function Home() {
         </form>
       </Modal>
 
-
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <h2 className="text-center mb-4">New Workspace</h2>
-        <form onSubmit={handleCreate} >
+
+        <form onSubmit={handleCreate}>
           <label className="block mb-2">Workspace name</label>
           <input
             type="text"

@@ -1,26 +1,26 @@
-import React, { useState, useRef, useEffect } from "react";
-import Tooltip from "@mui/material/Tooltip";
-import IconButton from "@mui/material/IconButton";
-import AddIcon from "@mui/icons-material/Add";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { ActivityCard } from "./ActivityCard";
-import { Section as SectionType, Activity } from "./types";
+import React, { useState, useRef, useEffect } from 'react';
+import Tooltip from '@mui/material/Tooltip';
+import IconButton from '@mui/material/IconButton';
+import AddIcon from '@mui/icons-material/Add';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { ActivityCard } from './ActivityCard';
+import { ISectionCard as SectionType, IActivityCard } from './types';
 
 interface SectionProps {
   section: SectionType;
-  activities: Activity[];
+  activities: IActivityCard[];
   onDrop: (
-    activity: Activity,
+    activity: IActivityCard,
     targetSectionId: string,
-    targetIndex: number
+    targetIndex: number,
   ) => void;
-  onDragStart: (activity: Activity) => void;
+  onDragStart: (activity: IActivityCard) => void;
   setOnAddActivity: (b: boolean) => void;
-  onActivityClick: (activity: Activity) => void;
+  onActivityClick: (activity: IActivityCard) => void;
   onEditClick: () => void; // เพิ่ม prop ใหม่สำหรับการเปิด modal edit
 }
 
-export function Section({
+export function SectionCard({
   section,
   activities,
   onDrop,
@@ -40,12 +40,12 @@ export function Section({
   }
 
   function handleMenuToggle() {
-    setShowMenu(prevShowMenu => !prevShowMenu);
+    setShowMenu((prevShowMenu) => !prevShowMenu);
   }
 
   function getDragOverIndex(
     e: React.DragEvent<HTMLDivElement>,
-    currentIndex: number
+    currentIndex: number,
   ) {
     const activityElement = activitiesRef.current[currentIndex];
     if (!activityElement) return currentIndex;
@@ -58,18 +58,18 @@ export function Section({
   }
 
   function handleDragOver(e: React.DragEvent<HTMLDivElement>, index?: number) {
-    const hasActivityData = e.dataTransfer.types.includes("application/json");
+    const hasActivityData = e.dataTransfer.types.includes('application/json');
     if (!hasActivityData) {
-      e.dataTransfer.dropEffect = "none";
+      e.dataTransfer.dropEffect = 'none';
       return;
     }
 
     e.preventDefault();
-    e.dataTransfer.dropEffect = "move";
+    e.dataTransfer.dropEffect = 'move';
 
     if (!isOver) setIsOver(true);
 
-    if (typeof index === "number") {
+    if (typeof index === 'number') {
       const newDragOverIndex = getDragOverIndex(e, index);
       setDragOverIndex(newDragOverIndex);
     }
@@ -93,15 +93,15 @@ export function Section({
     e.preventDefault();
 
     try {
-      const jsonData = e.dataTransfer.getData("application/json");
+      const jsonData = e.dataTransfer.getData('application/json');
       if (!jsonData) {
-        throw new Error("No activity data found");
+        throw new Error('No activity data found');
       }
 
       const activityData = JSON.parse(jsonData);
 
       if (!activityData.id || !activityData.title) {
-        throw new Error("Invalid activity data");
+        throw new Error('Invalid activity data');
       }
 
       if (activities.length === 0) {
@@ -112,7 +112,7 @@ export function Section({
         onDrop(activityData, section.id, activities.length);
       }
     } catch (error) {
-      console.log("Invalid drop:", error);
+      console.log('Invalid drop:', error);
     } finally {
       setIsOver(false);
       setDragOverIndex(null);
@@ -128,13 +128,13 @@ export function Section({
     }
 
     if (showMenu) {
-      document.addEventListener("mousedown", handleClickOutside);
+      document.addEventListener('mousedown', handleClickOutside);
     } else {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener('mousedown', handleClickOutside);
     }
 
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [showMenu]);
 
@@ -160,8 +160,9 @@ export function Section({
               <div
                 ref={menuRef}
                 className="absolute right-0 mt-2 w-48 bg-white border border-gray-300 rounded-md shadow-lg z-10"
-                style={{ marginTop: "2rem" }}
+                style={{ marginTop: '2rem' }}
               >
+
                 <button className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100"onClick={onEditClick}>Edit
               </button>
                 <button className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100">Delete</button>
@@ -175,8 +176,8 @@ export function Section({
       </div>
       <div
         className={`p-4 transition-colors duration-200 rounded-lg
-          ${isOver ? "bg-gray-100 ring-2 ring-blue-400" : ""}
-          ${activities.length === 0 ? "flex items-center justify-center" : ""}
+          ${isOver ? 'bg-gray-100 ring-2 ring-blue-400' : ''}
+          ${activities.length === 0 ? 'flex items-center justify-center' : ''}
           max-h-[calc(100vh-200px)] overflow-y-auto`} // Added max height and overflow for scrollbar
       >
         {activities.length > 0 ? (
@@ -189,7 +190,11 @@ export function Section({
                 className="relative"
                 onDragOver={(e) => handleDragOver(e, index)}
               >
-                <ActivityCard activity={activity} onDragStart={onDragStart} onClick={onActivityClick} />
+                <ActivityCard
+                  activity={activity}
+                  onDragStart={onDragStart}
+                  onClick={onActivityClick}
+                />
                 {dragOverIndex === index + 1 && (
                   <div className="h-2 bg-blue-200 my-2" />
                 )}
@@ -199,7 +204,7 @@ export function Section({
         ) : (
           <div
             className={`text-gray-400 text-center w-full ${
-              isOver ? "hidden" : ""
+              isOver ? 'hidden' : ''
             }`}
           >
             Drop activity here
