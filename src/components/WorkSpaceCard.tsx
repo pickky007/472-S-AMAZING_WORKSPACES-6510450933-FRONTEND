@@ -6,12 +6,14 @@ interface WorkSpaceCardProps {
   projectName: string;
   description: string;
   ownerName: string;
+  id: string;
 }
 
 export function WorkSpaceCard({
   projectName,
   description,
   ownerName,
+  id
 }: WorkSpaceCardProps) {
   
   const navigate = useNavigate();
@@ -57,7 +59,7 @@ export function WorkSpaceCard({
               style={{ marginTop: "2rem" }}
             >
               <p style={{fontWeight:'bold'}}>Invite Code: </p>
-              <p> 12345</p>
+              <p>{id}</p>
             </div>
           )}
         </div>

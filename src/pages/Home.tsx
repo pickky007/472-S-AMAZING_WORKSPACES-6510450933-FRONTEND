@@ -109,6 +109,7 @@ export function Home() {
               projectName={workspace.name}
               description={workspace.description || 'No description available'}
               ownerName={workspace.owner}
+              id={workspace.id}
             />
           ))
         )}
