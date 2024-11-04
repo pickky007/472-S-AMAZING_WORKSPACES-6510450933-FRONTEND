@@ -44,19 +44,7 @@ export function ActivityCard({ activity, onDragStart, onClick }: ActivityCardPro
           </span>
         </div>
       </div>
-      <div className="flex items-center">
-        <Tooltip title="More options">
-          <IconButton
-            size="small"
-            onClick={(e) => {
-              e.stopPropagation();
-              console.log("options clicked");
-            }}
-          >
-            <MoreVertIcon fontSize="small" />
-          </IconButton>
-        </Tooltip>
-      </div>
+      
     </div>
   );
 }

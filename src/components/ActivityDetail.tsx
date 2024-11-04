@@ -71,13 +71,8 @@ export function ActivityDetail({ title, description, status, assignee, startDate
 
           <label style={{ display: 'block', marginBottom: '0.5rem' }}>Description</label>
           <input type="text" placeholder="Description" style={{ display: 'block', marginBottom: '1rem', width: '100%', padding: '0.5rem', borderRadius: '0.25rem', border: '1px solid #ddd' }} />
-
-          <label style={{ display: 'block', marginBottom: '0.5rem' }}>Assign to?</label>
-          <select style={{ display: 'block', marginBottom: '1rem', width: '100%', padding: '0.5rem', borderRadius: '0.25rem', border: '1px solid #ddd' }}>
-            <option>Person</option>
-            {/* Add more options as needed */}
-          </select>
-
+          
+          
           <label style={{ display: 'block', marginBottom: '0.5rem' }}>Date range</label>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>
             <input type="date" style={{ width: '48%', padding: '0.5rem', borderRadius: '0.25rem', border: '1px solid #ddd' }} />

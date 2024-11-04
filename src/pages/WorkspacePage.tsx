@@ -94,7 +94,10 @@ export function WorkspacePage() {
   );
   const [isOnAddActivity, setOnAddActivity] = useState<boolean>(false);
   const [isOnAddSection, setOnAddSection] = useState<boolean>(false);
-
+  const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
+  function handleEditClick() {
+    setIsEditModalOpen(true);
+  }
   function handleDragStart(activity: Activity) {
     setDraggedActivity(activity);
   }
@@ -171,6 +174,7 @@ export function WorkspacePage() {
                 onDragStart={handleDragStart}
                 setOnAddActivity={setOnAddActivity}
                 onActivityClick={handleActivityClick}
+                onEditClick={handleEditClick}
               />
               {/* Add divider after each section except the last one */}
               {index < Object.values(sections).length - 1 && (
@@ -218,22 +222,7 @@ export function WorkspacePage() {
             }}
           />
 
-          <label style={{ display: "block", marginBottom: "0.5rem" }}>
-            Assign to?
-          </label>
-          <select
-            style={{
-              display: "block",
-              marginBottom: "1rem",
-              width: "100%",
-              padding: "0.5rem",
-              borderRadius: "0.25rem",
-              border: "1px solid #ddd",
-            }}
-          >
-            <option>Person</option>
-            {/* Add more options as needed */}
-          </select>
+
 
           <label style={{ display: "block", marginBottom: "0.5rem" }}>
             Date range
@@ -334,6 +323,44 @@ export function WorkspacePage() {
           />
         </div>
       )}
+
+      <Modal isOpen={isEditModalOpen} onClose={() => setIsEditModalOpen(false)}>
+      <h2 style={{ textAlign: "center", marginBottom: "1rem" }}>
+          Edit Section
+        </h2>
+        <form>
+          <label style={{ display: "block", marginBottom: "0.5rem" }}>
+            name
+          </label>
+          <input
+            type="text"
+            placeholder="Section name"
+            style={{
+              display: "block",
+              marginBottom: "1rem",
+              width: "100%",
+              padding: "0.5rem",
+              borderRadius: "0.25rem",
+              border: "1px solid #ddd",
+            }}
+          />
+          <button
+            type="submit"
+            style={{
+              display: "block",
+              width: "100%",
+              padding: "0.75rem",
+              backgroundColor: "#5DA27D",
+              color: "white",
+              borderRadius: "0.25rem",
+              border: "none",
+              cursor: "pointer",
+            }}
+          >
+            Save
+          </button>
+        </form>
+      </Modal>
     </div>
   );
 }
