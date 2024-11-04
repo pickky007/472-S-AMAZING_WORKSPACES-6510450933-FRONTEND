@@ -27,4 +27,14 @@ export class WorkspaceService {
             throw new Error('Failed to create workspace');
         }
     }
+
+
+    static async joinWorkspace(username: string, workspace_id: number): Promise<Workspace> {
+        try {
+            const response = await axios.post<IWorkspaceResponse>(ENDPOINTS.WORKSPACE.JOIN(username, workspace_id));
+            return Workspace.fromResponse(response.data);
+        } catch (error) {
+            throw new Error('Failed to create workspace');
+        }
+    }
 }
