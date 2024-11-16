@@ -1,27 +1,24 @@
-import { ISectionCreate, ISectionResponse } from "../types/section.types";
-import { Activity } from "./Activity";
+import { ISectionResponse, ISectionCreate } from "../types/section.types";
 
-class Section {
+export class Section {
+    id: number;
+    workspaceId: string;
     name: string;
-    kanbanBoardName: string;
-    activities: Activity[] = [];
 
-    constructor(i: ISectionResponse) {
-        this.name = i.name;
-        this.kanbanBoardName = i.kanbanBoardName;
-        this.activities = i.activities.map(a=>new Activity(a));
+    constructor(data: ISectionResponse) {
+        this.id = data.id;
+        this.workspaceId = data.workspace_id;
+        this.name = data.name;
     }
 
     toJSON(): ISectionCreate {
         return {
-            kanbanBoardName: this.kanbanBoardName,
-            name: this.name
-        }
+            workspace_id: this.workspaceId,
+            name: this.name,
+        };
     }
 
-    fromJSON(data: ISectionResponse): Section {
+    static fromResponse(data: ISectionResponse): Section {
         return new Section(data);
     }
 }
-
-export {Section};

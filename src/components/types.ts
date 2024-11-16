@@ -1,15 +1,35 @@
-export interface Activity {
+// types.ts
+export interface IActivityCard {
   id: string;
+  rawId: number;
+  color: string;
   title: string;
   description: string;
-  color: string;
-  status: string;
-  assignee: string;
+  owner: string;
   date: string;
+  sectionId: string;
 }
 
-export interface Section {
+export interface ISectionCard {
   id: string;
+  rawId: number;
   title: string;
-  activities: Activity[];
+  activities: IActivityCard[];
+}
+
+export type ActivityDragEvent = {
+  activity: IActivityCard;
+  sourceSection: string;
+  targetSection: string;
+  targetIndex: number;
+}
+
+// Optional - if you need separate backend types
+export interface IActivityResponse {
+  id: number;
+  name: string;
+  description: string;
+  startDate: string;
+  endDate: string;
+  // Add other backend fields as needed
 }

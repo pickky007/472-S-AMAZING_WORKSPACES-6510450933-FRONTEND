@@ -1,14 +1,17 @@
 export interface IUserResponse {
-  id: number;
+  username: string;
   first_name: string;
   last_name: string;
-  email: string;
-  avatar: string;
 }
 
 export interface IUserCreate {
+  username: string;
   first_name: string;
   last_name: string;
-  email: string;
+  password: string;
+}
+
+export interface IUserLogin {
+  username: string;
   password: string;
 }

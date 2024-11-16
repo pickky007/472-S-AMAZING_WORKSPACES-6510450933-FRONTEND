@@ -1,11 +1,11 @@
-import { IActivityResponse } from "./activity.types";
-
-export interface ISectionCreate {
+// section.types.ts
+export interface ISectionResponse {
+    id: number;
+    workspace_id: string;
     name: string;
-    kanbanBoardName: string;
 }
 
-export interface ISectionResponse extends ISectionCreate {
-    activities: IActivityResponse[];
-
+export interface ISectionCreate {
+    workspace_id: string;
+    name: string;
 }
