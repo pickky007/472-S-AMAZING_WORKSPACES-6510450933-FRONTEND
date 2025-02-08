@@ -1,3 +1,4 @@
+// src/components/Sidebar.tsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -17,7 +18,6 @@ import {
   Logout,
   Home,
 } from '@mui/icons-material';
-import { User } from '../models/User';
 import { IUserLogin } from '../types/user.types';
 
 interface NavigationItem {
@@ -27,24 +27,35 @@ interface NavigationItem {
   subitems?: Array<{
     label: string;
     path: string;
-  }>;
+  }> | null;
 }
 
 interface SidebarProps {
-  user: IUserLogin | null; // Accept the User or null if not authenticated
+  user: IUserLogin | null;
   setIsAuthenticated: (isAuthenticated: boolean) => void;
+  showHiddenMenu: boolean;
+  onHomeClick: () => void;  // เพิ่มฟังก์ชัน onHomeClick
 }
 
 const navigationItems: NavigationItem[] = [
   {
     label: 'Home',
     icon: <Home className="text-white" />,
-
     path: '/home',
+  },
+  {
+    label: 'Chat',
+    icon: <Home className="text-white" />,
+    path: '/chat',
+  },
+  {
+    label: 'Kanbanboard',
+    icon: <Home className="text-white" />,
+    path: '/kanbanboard',
   },
 ];
 
-function Sidebar({ user, setIsAuthenticated }: SidebarProps) {
+function Sidebar({ user, setIsAuthenticated, showHiddenMenu, onHomeClick }: SidebarProps) {
   const navigate = useNavigate();
   const [expandedItem, setExpandedItem] = useState<string | null>(null);
 
@@ -52,16 +63,8 @@ function Sidebar({ user, setIsAuthenticated }: SidebarProps) {
     if (item.subitems) {
       setExpandedItem(expandedItem === item.label ? null : item.label);
     } else {
-      if (item.path === '/home') {
-        navigate(item.path, { state: { user } }); // Pass user data as state
-      } else {
-        navigate(item.path);
-      }
+      navigate(item.path);
     }
-  }
-
-  function handleSubItemClick(path: string) {
-    navigate(path);
   }
 
   function handleLogout() {
@@ -78,45 +81,28 @@ function Sidebar({ user, setIsAuthenticated }: SidebarProps) {
       </Box>
 
       <List className="flex-1 py-2">
-        {navigationItems.map((item) => (
-          <React.Fragment key={item.label}>
-            <ListItem
-              className="p-2 hover:bg-gray-500 cursor-pointer"
-              onClick={() => handleItemClick(item)}
-            >
-              <ListItemIcon className="min-w-10 text-white">
-                {item.icon}
-              </ListItemIcon>
-              <ListItemText
-                primary={
-                  <span className="text-sm font-normal">{item.label}</span>
-                }
-              />
-              {item.subitems &&
-                (expandedItem === item.label ? <ExpandLess /> : <ExpandMore />)}
-            </ListItem>
-
-            {item.subitems && (
-              <Collapse
-                in={expandedItem === item.label}
-                timeout="auto"
-                unmountOnExit
+        {navigationItems
+          .filter(item => !item.label || showHiddenMenu || item.label === 'Home') // แสดงเฉพาะ Home และเมนูที่ถูกเปิดใช้งาน
+          .map((item) => (
+            <React.Fragment key={item.label}>
+              <ListItem
+                className="p-2 hover:bg-gray-500 cursor-pointer"
+                onClick={() => {
+                  if (item.label === 'Home') {
+                    onHomeClick(); // เมื่อคลิก Home, ซ่อน Chat และ Kanbanboard
+                  }
+                  handleItemClick(item);
+                }}
               >
-                <List disablePadding>
-                  {item.subitems.map((subitem) => (
-                    <ListItem
-                      key={subitem.label}
-                      className="pl-8 py-2 cursor-pointer"
-                      onClick={() => handleSubItemClick(subitem.path)}
-                    >
-                      <ListItemText primary={subitem.label} />
-                    </ListItem>
-                  ))}
-                </List>
-              </Collapse>
-            )}
-          </React.Fragment>
-        ))}
+                <ListItemIcon className="min-w-10 text-white">
+                  {item.icon}
+                </ListItemIcon>
+                <ListItemText
+                  primary={<span className="text-sm font-normal">{item.label}</span>}
+                />
+              </ListItem>
+            </React.Fragment>
+          ))}
       </List>
 
       <ListItem
