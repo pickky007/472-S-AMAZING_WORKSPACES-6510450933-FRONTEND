@@ -6,6 +6,7 @@ import { LoginPage } from './pages/LoginPage';
 import { Home } from './pages/Home';
 import { WorkspacePage } from './pages/WorkspacePage';
 import { RegisterPage } from './pages/RegisterPage';
+import { ChatPage } from './pages/ChatPage'; // Import the new ChatPage
 import { IUserLogin } from './types/user.types';
 import { Workspace } from './models/Workspace';
 
@@ -43,6 +44,7 @@ function App() {
             />
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/kanbanboard" element={workspaceTo ? <WorkspacePage workspaceTo={workspaceTo} user={user!} /> : <Navigate to="/" replace />} />
+            <Route path="/chat" element={workspaceTo ? <ChatPage workspace={workspaceTo} user={user!} /> : <Navigate to="/" replace />} /> {/* Add the new chat route */}
           </Routes>
         </main>
       </div>
