@@ -1,23 +1,21 @@
 import { IMessageResponse, IMessageCreate } from "../types/message.types";
 
 export class Message {
-    text: string;
-    owner_name: string;
-    owner_username: string;
+    message: string;
+    username: string;
     date: Date;
 
     constructor(data: IMessageResponse) {
-        this.text = data.text;
-        this.owner_name = data.owner_name;
-        this.owner_username = data.owner_username;
-        this.date = data.datetime;
+        this.message = data.message;
+        this.username = data.username;
+        this.date = data.date;
     }
 
     toJSON(workspace_id: string): IMessageCreate {
         return {
-            text: this.text,
+            message: this.message,
             workspace_id: workspace_id,
-            owner_username: this.owner_username
+            username: this.username
         };
     }
 

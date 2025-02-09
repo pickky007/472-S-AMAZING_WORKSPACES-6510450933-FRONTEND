@@ -27,28 +27,24 @@ export class MessageService {
 
         return [
             Message.fromResponse({
-                datetime: new Date(Date.UTC(2025, 0, 1, 0, 0, 0, 0)),
-                owner_name: "A",
-                owner_username: "A",
-                text: "Happy Newyear!",
+                date: new Date(Date.UTC(2025, 0, 1, 0, 0, 0, 0)),
+                username: "A",
+                message: "Happy Newyear!",
             }),
             Message.fromResponse({
-                datetime: new Date(Date.UTC(2025, 0, 1, 1, 0, 0, 0)),
-                owner_name: "A",
-                owner_username: "A",
-                text: "Hello Everyone?",
+                date: new Date(Date.UTC(2025, 0, 1, 1, 0, 0, 0)),
+                username: "A",
+                message: "Hello Everyone?",
             }),
             Message.fromResponse({
-                datetime: new Date(Date.UTC(2025, 0, 1, 1, 30, 0, 0)),
-                owner_name: "B",
-                owner_username: "B",
-                text: "Happy Newya :D",
+                date: new Date(Date.UTC(2025, 0, 1, 1, 30, 0, 0)),
+                username: "B",
+                message: "Happy Newya :D",
             }),
             Message.fromResponse({
-                datetime: new Date(Date.UTC(2025, 0, 1, 2, 30, 0, 0)),
-                owner_name: "C",
-                owner_username: "C",
-                text: "Please enter your name and password for this message to be sent to the server and your account will be automatically updated when the message is sent back again and the next message",
+                date: new Date(Date.UTC(2025, 0, 1, 2, 30, 0, 0)),
+                username: "C",
+                message: "Please enter your name and password for this message to be sent to the server and your account will be automatically updated when the message is sent back again and the next message",
             })
         ];
     }
@@ -59,10 +55,10 @@ export class MessageService {
     static async sendMessage(message: IMessageCreate): Promise<Message> {
         try {
             const response = await axios.post<IMessageResponse>(
-                ENDPOINTS.WORKSPACE.SEND_MESSAGE(message.workspace_id),
+                ENDPOINTS.WORKSPACE.SEND_MESSAGE(),
                 {
-                    text: message.text,
-                    owner_username: message.owner_username,
+                    message: message.message,
+                    username: message.username,
                     workspace_id: message.workspace_id
                 },
                 {

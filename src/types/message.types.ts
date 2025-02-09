@@ -1,12 +1,11 @@
 export interface IMessageResponse {
-    owner_username: string;
-    owner_name: string;
-    datetime: Date;
-    text: string;
+    username: string;
+    date: Date;
+    message: string;
 }
   
 export interface IMessageCreate {
-    owner_username: string;
-    text: string;
+    username: string;
+    message: string;
     workspace_id: string;
 }

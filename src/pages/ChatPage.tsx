@@ -14,15 +14,16 @@ export const ChatPage: React.FC<ChatPageProps> = ({ workspace, user }) => {
     const [messages, setMessages] = useState<Message[]>([]);
     const [newMessage, setNewMessage] = useState<string>('');
 
+    const fetchMessages = async () => {
+        try {
+            const fetchedMessages = await MessageService.getAllMessagesByWorkspaceId(workspace.id);
+            setMessages(fetchedMessages);
+        } catch (error) {
+            console.error('Error fetching messages:', error);
+        }
+    };
+
     useEffect(() => {
-        const fetchMessages = async () => {
-            try {
-                const fetchedMessages = await MessageService.getMockupMessage(workspace.id);
-                setMessages(fetchedMessages);
-            } catch (error) {
-                console.error('Error fetching messages:', error);
-            }
-        };
         fetchMessages();
     }, [workspace.id]);
 
@@ -30,12 +31,13 @@ export const ChatPage: React.FC<ChatPageProps> = ({ workspace, user }) => {
         if (!newMessage.trim()) return;
         try {
             const message = await MessageService.sendMessage({
-                owner_username: user.username,
-                text: newMessage,
+                username: user.username,
+                message: newMessage,
                 workspace_id: workspace.id,
             });
             setMessages((prevMessages) => [...prevMessages, message]);
             setNewMessage('');
+            await fetchMessages();
         } catch (error) {
             console.error('Error sending message:', error);
         }
@@ -54,8 +56,8 @@ export const ChatPage: React.FC<ChatPageProps> = ({ workspace, user }) => {
                 <div style={{ ...styles.messagesList, maxHeight: '300px', overflowY: 'auto', marginBottom: '10px' }}>
                     {messages.map((msg, index) => (
                         <div key={index} style={styles.messageItem}>
-                            <p><strong>{msg.owner_name}:</strong> {msg.text}</p>
-                            <p style={styles.messageDate}><em>{msg.date.toLocaleString()}</em></p>
+                            <p><strong>{msg.username}:</strong> {msg.message}</p>
+                            <p style={styles.messageDate}><em>{msg.date?.toLocaleString()??"ERROR NO DATE INFOMATION"}</em></p>
                         </div>
                     ))}
                 </div>
