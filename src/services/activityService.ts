@@ -5,6 +5,26 @@ import { Activity } from '../models/Activity';
 
 export class ActivityService {
   // Function to get activities by section and workspace ID
+
+  static async getActivityByWorkspace(
+    workspaceId: string,
+  ): Promise<Activity[]> {
+    try{
+      const response = await axios.get<IActivityResponse[]>(
+        ENDPOINTS.WORKSPACE.GET_ALL_ACTIVITY(workspaceId),
+        {
+          withCredentials: true,
+        },
+
+      )
+      return response.data.map((activity) => Activity.fromResponse(activity));
+    } catch (error) {
+      throw new Error('Failed to fetch activity');
+    }
+    
+  }
+
+  
   static async getActivitiesBySectionAndWorkspace(
     sectionId: number,
     workspaceId: string,

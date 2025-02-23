@@ -9,6 +9,7 @@ import { RegisterPage } from './pages/RegisterPage';
 import { ChatPage } from './pages/ChatPage'; // Import the new ChatPage
 import { IUserLogin } from './types/user.types';
 import { Workspace } from './models/Workspace';
+import { CalendarPage } from './pages/CalendarPage';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -45,6 +46,7 @@ function App() {
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/kanbanboard" element={workspaceTo ? <WorkspacePage workspaceTo={workspaceTo} user={user!} /> : <Navigate to="/" replace />} />
             <Route path="/chat" element={workspaceTo ? <ChatPage workspace={workspaceTo} user={user!} /> : <Navigate to="/" replace />} /> {/* Add the new chat route */}
+            <Route path="/calendar" element={workspaceTo ? <CalendarPage workspace={workspaceTo} user={user!} /> : <Navigate to="/" replace />} />
           </Routes>
         </main>
       </div>
