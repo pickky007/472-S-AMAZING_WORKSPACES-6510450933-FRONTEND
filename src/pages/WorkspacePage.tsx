@@ -16,6 +16,7 @@ import { ISectionCreate } from '../types/section.types';
 import { User } from '../models/User';
 import { IUserLogin } from '../types/user.types';
 import { IActivityCreate } from '../types/activity.types';
+import { ToggleButton, ToggleButtonGroup } from '@mui/material';
 
 type ActivityType = {
   id: string;
@@ -49,6 +50,8 @@ export function WorkspacePage({
   const [selectedActivity, setSelectedActivity] = useState<ActivityType | null>(
     null,
   );
+  const [actView, setActView] = useState<boolean>(false);
+
   const [isOnAddActivity, setOnAddActivity] = useState<boolean>(false);
   const [isOnAddSection, setOnAddSection] = useState<boolean>(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
@@ -59,6 +62,7 @@ export function WorkspacePage({
   const eDate = useRef<HTMLInputElement>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [selectSecId, setSelectSecId] = useState(Number);
+  
   const fetchData = async () => {
     try {
       const sectionData: Section[] =
@@ -131,6 +135,12 @@ export function WorkspacePage({
     setDraggedActivity(activity);
   }
 
+  function handleToggleView(event: any, newView: string | null) {
+    if (newView !== null) {
+      setActView(newView === 'list-view');
+    }
+  }
+
   function handleActivityClick(activity: ActivityType) {
     setSelectedActivity(activity);
   }
@@ -142,7 +152,6 @@ export function WorkspacePage({
   ) {
     if (!draggedActivity) return;
 
-    // หา source section จาก activity.sectionId ที่เราเพิ่มเข้าไป
     const sourceSectionId = draggedActivity.sectionId;
 
     // ถ้าลากไปที่เดิม ไม่ต้องทำอะไร
@@ -158,28 +167,23 @@ export function WorkspacePage({
     try {
       setIsLoading(true);
 
-      // แปลง section ID เป็นตัวเลขโดยใช้ rawId ที่เก็บไว้
       const toSectionId = sections[targetSectionId].rawId;
 
-      // เรียก API เพื่ออัปเดตตำแหน่งใน backend
       await ActivityService.moveActivity(
         workspaceTo.id,
         toSectionId,
         draggedActivity.rawId,
       );
 
-      // สร้าง activity ใหม่ด้วย ID ที่อัปเดตแล้ว
       const updatedActivity = {
         ...draggedActivity,
         id: `${targetSectionId}-activity-${draggedActivity.rawId}`,
         sectionId: targetSectionId,
       };
 
-      // อัปเดต state
       setSections((prevSections) => {
         const newSections = { ...prevSections };
 
-        // ลบจาก source section
         newSections[sourceSectionId] = {
           ...newSections[sourceSectionId],
           activities: newSections[sourceSectionId].activities.filter(
@@ -258,10 +262,8 @@ export function WorkspacePage({
     setOnAddActivity(true);
   }
 
-  // ... ส่วนที่เหลือของ component (render, modals, etc.) ...
-
   return (
-    <div className="flex flex-col items-start relative w-full max-w-full px-4">
+    <div className="flex flex-col items-start relative w-full max-w-full p-8">
       {isLoading && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-4 rounded-lg">Loading...</div>
@@ -269,6 +271,35 @@ export function WorkspacePage({
       )}
 
       <div className="w-full flex items-center mb-4 justify-between">
+        <ToggleButtonGroup
+          color="primary"
+          exclusive
+          value={actView ? 'list-view' : 'normal-view'}
+          onChange={handleToggleView}
+          aria-label="View Mode"
+          sx={{
+            '& .MuiToggleButton-root': {
+              border: 'none',
+              padding: '6px 16px',
+              textTransform: 'none',
+              fontWeight: 500,
+              width: 'full',
+              '&.Mui-selected': {
+                backgroundColor: '#3A8C84',
+                color: 'white',
+                '&:hover': {
+                  backgroundColor: '#2D7A72',
+                }
+              },
+              '&:hover': {
+                backgroundColor: 'rgba(58, 140, 132, 0.08)',
+              }
+            }
+          }}
+        >
+          <ToggleButton value="normal-view">Normal View</ToggleButton>
+          <ToggleButton value="list-view">List View</ToggleButton>
+        </ToggleButtonGroup>
         <span className="self-start"></span>
         <button
           onClick={() => setOnAddSection(true)}
@@ -290,31 +321,69 @@ export function WorkspacePage({
         </button>
       </div>
 
-      <div className="w-full overflow-x-auto">
-        <div className="flex min-w-fit">
-          {Object.values(sections).map((section, index) => (
-            <div key={section.id} className="flex">
-              <SectionCard
-                section={section}
-                activities={section.activities}
-                onDrop={handleDrop}
-                onDragStart={handleDragStart}
-                handleOnAddOptionClick={() => {
-                  setModalActivity(section.rawId);
-                }}
-                onActivityClick={handleActivityClick}
-                onEditClick={() => setIsEditModalOpen(true)}
-              />
-              {index < Object.values(sections).length - 1 && (
-                <div className="w-px bg-gray-200 h-full" />
-              )}
+      {!actView ? (
+        <div className="w-full overflow-x-auto">
+          <div className="flex min-w-fit">
+            {Object.values(sections).map((section, index) => (
+              <div key={section.id} className="flex">
+                <SectionCard
+                  section={section}
+                  activities={section.activities}
+                  onDrop={handleDrop}
+                  onDragStart={handleDragStart}
+                  handleOnAddOptionClick={() => {
+                    setModalActivity(section.rawId);
+                  }}
+                  onActivityClick={handleActivityClick}
+                  onEditClick={() => setIsEditModalOpen(true)}
+                />
+                {index < Object.values(sections).length - 1 && (
+                  <div className="w-px bg-gray-200 h-full" />
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      ) : (
+        <div className="w-full">
+          {Object.values(sections).map((section) => (
+            <div key={section.id} className="mb-4">
+              <div className="bg-gray-100 p-3 rounded-t-lg flex justify-between items-center">
+                <h3 className="text-lg font-semibold">{section.title}</h3>
+                <button 
+                  className="text-teal-600 hover:text-teal-800"
+                  onClick={() => setModalActivity(section.rawId)}
+                >
+                 
+                </button>
+              </div>
+              <div className="bg-white rounded-b-lg shadow-sm p-2">
+                {section.activities.length > 0 ? (
+                  section.activities.map((activity) => (
+                    <div 
+                      key={activity.id}
+                      className="p-3 mb-2 border-l-4 hover:bg-gray-50 cursor-pointer rounded transition-colors"
+                      style={{ borderLeftColor: activity.color }}
+                      onClick={() => handleActivityClick(activity)}
+                    >
+                      <h4 className="font-medium">{activity.title}</h4>
+                      <div className="flex mt-1 text-sm text-gray-600">
+                        <div className="mr-4">{activity.owner}</div>
+                        <div>Time:  {activity.date.replace('Date ', '')}</div>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <div className="py-3 px-2 text-gray-500 text-center">
+                    No activities in this section
+                  </div>
+                )}
+              </div>
             </div>
           ))}
         </div>
-      </div>
+      )}
 
-      {/* Existing Modals */}
-      {/* ... */}
       {selectedActivity && (
         <div className="activity-detail-container fixed right-0 top-0 bottom-0 w-1/3 bg-white shadow-lg p-4">
           <ActivityDetail
@@ -521,4 +590,4 @@ export function WorkspacePage({
       </Modal>
     </div>
   );
-}
+} 
