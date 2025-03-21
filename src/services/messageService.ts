@@ -21,35 +21,6 @@ export class MessageService {
     }
 
     /**
-     * @deprecated
-     */
-    static async getMockupMessage(workspaceId: string): Promise<Message[]> {
-
-        return [
-            Message.fromResponse({
-                date: new Date(Date.UTC(2025, 0, 1, 0, 0, 0, 0)),
-                username: "A",
-                message: "Happy Newyear!",
-            }),
-            Message.fromResponse({
-                date: new Date(Date.UTC(2025, 0, 1, 1, 0, 0, 0)),
-                username: "A",
-                message: "Hello Everyone?",
-            }),
-            Message.fromResponse({
-                date: new Date(Date.UTC(2025, 0, 1, 1, 30, 0, 0)),
-                username: "B",
-                message: "Happy Newya :D",
-            }),
-            Message.fromResponse({
-                date: new Date(Date.UTC(2025, 0, 1, 2, 30, 0, 0)),
-                username: "C",
-                message: "Please enter your name and password for this message to be sent to the server and your account will be automatically updated when the message is sent back again and the next message",
-            })
-        ];
-    }
-
-    /**
      * @param message **ต้องกำหนด message.workspace_id, message.text และ message.owner_username มาด้วย**
      */
     static async sendMessage(message: IMessageCreate): Promise<Message> {
@@ -57,6 +28,7 @@ export class MessageService {
             const response = await axios.post<IMessageResponse>(
                 ENDPOINTS.WORKSPACE.SEND_MESSAGE(),
                 {
+                    
                     message: message.message,
                     username: message.username,
                     workspace_id: message.workspace_id
@@ -70,4 +42,21 @@ export class MessageService {
             throw new Error('Failed to send message :(');
         }
     }
+
+    static async deleteMessage(id:string){
+        try {
+            const response = await axios.post<IMessageResponse>(
+                ENDPOINTS.WORKSPACE.DELETE_MESSAGE(),
+                {
+                    id: id+''
+                },
+                {
+                    withCredentials: true,
+                },
+            );
+        } catch (error) {
+            throw new Error('Failed to delete message :(' + error);
+        }
+    }
+
 }

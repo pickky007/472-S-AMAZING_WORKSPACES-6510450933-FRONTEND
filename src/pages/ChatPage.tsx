@@ -4,7 +4,7 @@ import { Workspace } from '../models/Workspace';
 import { MessageService } from '../services/messageService';
 import { Message } from '../models/Message';
 import { IUserLogin } from '../types/user.types';
-
+import { FaTrash } from 'react-icons/fa';
 interface ChatPageProps {
     workspace: Workspace;
     user: IUserLogin;
@@ -31,6 +31,7 @@ export const ChatPage: React.FC<ChatPageProps> = ({ workspace, user }) => {
         if (!newMessage.trim()) return;
         try {
             const message = await MessageService.sendMessage({
+                id: '' ,
                 username: user.username,
                 message: newMessage,
                 workspace_id: workspace.id,
@@ -43,21 +44,30 @@ export const ChatPage: React.FC<ChatPageProps> = ({ workspace, user }) => {
         }
     };
 
+    const handleDeleteMessage = async (messageId: string) => {
+        try {
+            await MessageService.deleteMessage(messageId);
+            setMessages((prevMessages) => prevMessages.filter(msg => msg.id !== messageId));
+        } catch (error) {
+            console.error('Error deleting message:', error);
+        }
+    };
+
     return (
         <div style={styles.container}>
             <h1 style={styles.title}>Chat Page</h1>
-            <h2 style={styles.subtitle}>Workspace Information</h2>
-            <p><strong>ID:</strong> {workspace.id}</p>
-            <p><strong>Name:</strong> {workspace.name}</p>
-            <p><strong>Description:</strong> {workspace.description}</p>
-            <p><strong>Owner:</strong> {workspace.owner}</p>
             <div style={styles.chatContainer}>
                 <h3 style={styles.messagesTitle}>Messages</h3>
-                <div style={{ ...styles.messagesList, maxHeight: '300px', overflowY: 'auto', marginBottom: '10px' }}>
-                    {messages.map((msg, index) => (
-                        <div key={index} style={styles.messageItem}>
-                            <p><strong>{msg.username}:</strong> {msg.message}</p>
-                            <p style={styles.messageDate}><em>{msg.date?.toLocaleString()??"ERROR NO DATE INFOMATION"}</em></p>
+                <div style={styles.messagesList}>
+                    {messages.map((msg) => (
+                        <div key={msg.id} style={styles.messageItem}>
+                            <div style={styles.messageContent}>
+                                <p><strong>{msg.username}:</strong> {msg.message}</p>
+                                {msg.username === user.username && (
+                                    <FaTrash style={styles.trashIcon} onClick={() => handleDeleteMessage(msg.id)} />
+                                )}
+                            </div>
+                            <p style={styles.messageDate}><em>{msg.date?.toLocaleString() ?? "ERROR NO DATE INFORMATION"}</em></p>
                         </div>
                     ))}
                 </div>
@@ -98,7 +108,7 @@ const styles = {
     },
     messagesList: {
         maxHeight: '300px',
-        overflowY: 'auto',
+        overflowY: 'auto' as const,
         marginBottom: '10px'
     },
     messageItem: {
@@ -109,6 +119,7 @@ const styles = {
         fontSize: '12px',
         color: '#888'
     },
+    messageContent: { display: 'flex', justifyContent: 'space-between', alignItems: 'center' },
     textarea: {
         width: '100%',
         height: '60px',
@@ -124,5 +135,6 @@ const styles = {
         border: 'none',
         borderRadius: '5px',
         cursor: 'pointer'
-    }
+    },
+    trashIcon: { color: 'black', cursor: 'pointer', marginLeft: '10px' }
 };

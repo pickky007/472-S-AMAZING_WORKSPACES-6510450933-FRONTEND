@@ -25,6 +25,7 @@ export const ENDPOINTS = {
     EDIT_ACTIVITY: (workspace_id: string, section_id: number, activity_id: number) => `/workspaces/${workspace_id}/${section_id}/activities/${activity_id}/edit`,
     EDIT_SECTION: (workspace_id: string, section_id: number) => `/workspaces/${workspace_id}/${section_id}/edit`,
     SEND_MESSAGE: () => `/messages`,
-    GET_MESSAGES: (workspace_id: string) => `/messages/${workspace_id}`
+    GET_MESSAGES: (workspace_id: string) => `/messages/${workspace_id}`,
+    DELETE_MESSAGE: () => '/message/delete',
   },
 };
