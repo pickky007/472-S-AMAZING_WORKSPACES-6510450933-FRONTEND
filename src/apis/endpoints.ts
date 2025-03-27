@@ -27,5 +27,6 @@ export const ENDPOINTS = {
     SEND_MESSAGE: () => `/messages`,
     GET_MESSAGES: (workspace_id: string) => `/messages/${workspace_id}`,
     DELETE_MESSAGE: () => '/message/delete',
+    SEARCH_MESSAGES: (workspace_id: string, query: string, regex: boolean = false) => `/messages/${workspace_id}/search?query=${query}&regex=${regex}`,
   },
 };
