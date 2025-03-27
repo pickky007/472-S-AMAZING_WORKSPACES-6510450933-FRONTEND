@@ -27,6 +27,8 @@ type ActivityType = {
   owner: string;
   date: string;
   sectionId: string; // เพิ่ม sectionId เพื่อติดตามว่า activity อยู่ใน section ไหน
+  startDate: Date;
+  endDate: Date;
 };
 
 type SectionType2 = {
@@ -62,7 +64,8 @@ export function WorkspacePage({
   const eDate = useRef<HTMLInputElement>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [selectSecId, setSelectSecId] = useState(Number);
-  
+  const [sortOrder, setSortOrder] = useState<string>('title');
+
   const fetchData = async () => {
     try {
       const sectionData: Section[] =
@@ -116,6 +119,8 @@ export function WorkspacePage({
               description: activity.description,
               owner: owner,
               date: `Date ${formatDate(startDate)} - ${formatDate(endDate)}`, // ใช้วันที่ที่จัดรูปแบบ
+              startDate: startDate,
+              endDate: endDate,
               sectionId: sectionKey,
             };
           }),
@@ -130,6 +135,21 @@ export function WorkspacePage({
   useEffect(() => {
     fetchData();
   }, []);
+
+  function handleSortChange(event: React.ChangeEvent<HTMLSelectElement>) {
+    setSortOrder(event.target.value);
+  };
+
+  function sortActivities(activities: ActivityType[]) {
+    return activities.sort((a, b) => {
+      if (sortOrder === 'title') {
+        return a.title.localeCompare(b.title);
+      } else if (sortOrder === 'date') {
+        return a.startDate.getTime() - b.startDate.getTime();
+      }
+      return 0;
+    });
+  };
 
   function handleDragStart(activity: ActivityType) {
     setDraggedActivity(activity);
@@ -158,7 +178,7 @@ export function WorkspacePage({
     if (
       sourceSectionId === targetSectionId &&
       sections[targetSectionId].activities[targetIndex]?.id ===
-        draggedActivity.id
+      draggedActivity.id
     ) {
       setDraggedActivity(null);
       return;
@@ -346,21 +366,25 @@ export function WorkspacePage({
         </div>
       ) : (
         <div className="w-full">
+          <div className="mb-4">
+            <label htmlFor="sortOrder" className="mr-2">Sort by:</label>
+            <select id="sortOrder" value={sortOrder} onChange={handleSortChange} className="p-2 border rounded">
+              <option value="title">Title</option>
+              <option value="date">Date</option>
+            </select>
+          </div>
           {Object.values(sections).map((section) => (
             <div key={section.id} className="mb-4">
               <div className="bg-gray-100 p-3 rounded-t-lg flex justify-between items-center">
                 <h3 className="text-lg font-semibold">{section.title}</h3>
-                <button 
-                  className="text-teal-600 hover:text-teal-800"
-                  onClick={() => setModalActivity(section.rawId)}
-                >
-                 
+                <button className="text-teal-600 hover:text-teal-800" onClick={() => setModalActivity(section.rawId)}>
+                  Add Activity
                 </button>
               </div>
               <div className="bg-white rounded-b-lg shadow-sm p-2">
                 {section.activities.length > 0 ? (
-                  section.activities.map((activity) => (
-                    <div 
+                  sortActivities(section.activities).map((activity) => (
+                    <div
                       key={activity.id}
                       className="p-3 mb-2 border-l-4 hover:bg-gray-50 cursor-pointer rounded transition-colors"
                       style={{ borderLeftColor: activity.color }}
@@ -369,14 +393,12 @@ export function WorkspacePage({
                       <h4 className="font-medium">{activity.title}</h4>
                       <div className="flex mt-1 text-sm text-gray-600">
                         <div className="mr-4">{activity.owner}</div>
-                        <div>Time:  {activity.date.replace('Date ', '')}</div>
+                        <div>Time: {activity.date.replace('Date ', '')}</div>
                       </div>
                     </div>
                   ))
                 ) : (
-                  <div className="py-3 px-2 text-gray-500 text-center">
-                    No activities in this section
-                  </div>
+                  <div className="py-3 px-2 text-gray-500 text-center">No activities in this section</div>
                 )}
               </div>
             </div>
