@@ -5,6 +5,8 @@ import { MessageService } from '../services/messageService';
 import { Message } from '../models/Message';
 import { IUserLogin } from '../types/user.types';
 import { FaTrash } from 'react-icons/fa';
+import { Snackbar, Alert } from '@mui/material';
+
 interface ChatPageProps {
     workspace: Workspace;
     user: IUserLogin;
@@ -13,7 +15,7 @@ interface ChatPageProps {
 export const ChatPage: React.FC<ChatPageProps> = ({ workspace, user }) => {
     const [messages, setMessages] = useState<Message[]>([]);
     const [newMessage, setNewMessage] = useState<string>('');
-
+    const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
     const fetchMessages = async () => {
         try {
             const fetchedMessages = await MessageService.getAllMessagesByWorkspaceId(workspace.id);
@@ -48,6 +50,10 @@ export const ChatPage: React.FC<ChatPageProps> = ({ workspace, user }) => {
         try {
             await MessageService.deleteMessage(messageId);
             setMessages((prevMessages) => prevMessages.filter(msg => msg.id !== messageId));
+    
+            console.log("Before setting Snackbar:", snackbarOpen); // ตรวจสอบค่าก่อนเปลี่ยน
+            setSnackbarOpen(true);
+            console.log("After setting Snackbar:", snackbarOpen); // ตรวจสอบค่าหลังเปลี่ยน
         } catch (error) {
             console.error('Error deleting message:', error);
         }
@@ -79,6 +85,17 @@ export const ChatPage: React.FC<ChatPageProps> = ({ workspace, user }) => {
                 />
                 <button style={styles.button} onClick={handleSendMessage}>Send</button>
             </div>
+
+            <Snackbar
+                open={snackbarOpen}
+                autoHideDuration={3000}
+                onClose={() => setSnackbarOpen(false)}
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+            >
+                <Alert onClose={() => setSnackbarOpen(false)} severity="success">
+                    Success! Message deleted.
+                </Alert>
+            </Snackbar>
         </div>
     );
 };
