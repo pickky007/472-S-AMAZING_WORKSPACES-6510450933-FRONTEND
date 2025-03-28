@@ -2,7 +2,7 @@ import axios, { InternalAxiosRequestConfig } from "axios";
 
 // สร้าง axios instance
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:25565", // เปลี่ยนเป็น URL ของ localhost
+  baseURL: process.env.REACT_APP_API_URL, // เปลี่ยนเป็น URL ของ localhost
   timeout: 5000,
   headers: {
     "Content-Type": "application/json",
