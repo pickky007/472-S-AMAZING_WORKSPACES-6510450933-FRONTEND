@@ -40,22 +40,28 @@ export const CalendarPage: React.FC<CalendarProps> = ({ workspace, user }) => {
   const activityName = useRef<HTMLInputElement>(null);
   const sDate = useRef<HTMLInputElement>(null);
   const eDate = useRef<HTMLInputElement>(null);
-  const [selectSecId, setSelectSecId] = useState<number>(0);
+  const [selectSecId, setSelectSecId] = useState<number>(1);
   const [sections, setSections] = useState<Section[]>([]);
   const [activities, setActivities] = useState<Activity[]>([]);
   const [calendarEvents, setCalendarEvents] = useState<CalendarEvent[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [empty, setEmpty] = useState<boolean>(true);
-
+  const [isEditModalOpen, setEditModalOpen] = useState<boolean>(false);
+  const [selectedActivity, setSelectedActivity] = useState<Activity>();
+  const [sectionName, setSectionName] = useState<String>();
   const fetchData = async () => {
     try {
       setLoading(true);
       const fetchedActivity = await ActivityService.getActivityByWorkspace(workspace.id);
       setActivities(fetchedActivity);
+      console.log("available actiivty: ")
+      console.log(activities)
       
 
       const fetchedSection = await SectionService.getAllSectionsByWorkspaceId(workspace.id);
       setSections(fetchedSection);
+      console.log("section")
+      console.log(sections)
 
      
       if (fetchedActivity.length > 0) {
@@ -64,7 +70,7 @@ export const CalendarPage: React.FC<CalendarProps> = ({ workspace, user }) => {
       setLoading(false);
     } catch (error) {
       console.error('Error fetching activities: ', error);
-      setLoading(false); // In case of error, stop the loading spinner
+      setLoading(false);
     }
   };
 
@@ -76,12 +82,19 @@ export const CalendarPage: React.FC<CalendarProps> = ({ workspace, user }) => {
     if (activities.length > 0) {
       const mappedEvents = activities.map((activity) => ({
         title: activity.name,
+        sectionId: activity.sectionId,
         start: formatDateToCustomFormat(activity.startDate),
         end: formatDateToCustomFormat(activity.endDate),
         id: `${activity.id}${workspace.id}`,
+   
+        
       }));
+    
       setCalendarEvents(mappedEvents);
     }
+
+
+    console.log(activities)
   }, [activities, workspace.id]);
   
 
@@ -111,6 +124,8 @@ export const CalendarPage: React.FC<CalendarProps> = ({ workspace, user }) => {
       section_id: selectSecId,
     };
 
+    console.log('Id'+selectSecId)
+
     ActivityService.createActivity(activityData)
       .then(() => {
         fetchData();
@@ -139,6 +154,22 @@ export const CalendarPage: React.FC<CalendarProps> = ({ workspace, user }) => {
           hour12: false,
           meridiem: false,
         }}
+        eventClick={function(info) {
+          const eventId = info.event.id;
+          
+          const clickedActivity = activities.find(activity => 
+            `${activity.id}${workspace.id}` === eventId
+          );
+          
+          
+          if (clickedActivity) {            
+           
+      
+            setSelectedActivity(clickedActivity);
+            setEditModalOpen(true);
+          }
+        }}
+      
         />
 
  
@@ -196,6 +227,32 @@ export const CalendarPage: React.FC<CalendarProps> = ({ workspace, user }) => {
           </form>
         </div>
       </Modal>
+      <Modal open={isEditModalOpen} onClose={() => setEditModalOpen(false)}>
+        <div style={styles.modal}>
+          <h2 style={{ textAlign: 'center', marginBottom: '1rem', fontWeight:'bold', fontSize:'1.4rem' }}>
+            Activity Details
+          </h2>
+          {selectedActivity && (
+            <div> 
+               <p style={{fontWeight: 'bold', fontSize:'20px'}}>Activity name</p>
+               <p style={{marginBottom:'5px'}}>{selectedActivity.name}</p>
+
+          
+              <p style={{fontWeight: 'bold', fontSize:'20px'}}>Description</p>
+              <p style={{marginBottom:'5px'}}>{selectedActivity.description}</p>
+
+              <p style={{fontWeight: 'bold', fontSize:'20px'}}>Start Date</p>
+              <p style={{marginBottom:'5px'}}>{new Date(selectedActivity.startDate).toLocaleDateString()}</p>
+
+              <p style={{fontWeight: 'bold', fontSize:'20px'}}>End Date</p>
+              <p style={{marginBottom:'5px'}}>{new Date(selectedActivity.startDate).toLocaleDateString()}</p>
+      
+              <p><strong>Owner:</strong> {selectedActivity.owner}</p>
+            
+            </div>
+          )}
+        </div>
+    </Modal>
     </div>
   );
 };
@@ -221,12 +278,12 @@ const styles = {
 
   modal:{
     backgroundColor: 'white',
-    padding: '20px',
+    padding: '25px',
     borderRadius: '0.25rem',
-    width: '50%',               // กำหนดความกว้าง
-    position: 'fixed' as 'fixed',          // ทำให้ modal อยู่ติดกับหน้าจอ
-    top: '50%',                 // ตั้งตำแหน่งบนที่ 50% ของความสูงหน้าจอ
-    left: '50%',                // ตั้งตำแหน่งซ้ายที่ 50% ของความกว้างหน้าจอ
+    width: '40%',              
+    position: 'fixed' as 'fixed',         
+    top: '50%',                
+    left: '50%',              
     transform: 'translate(-50%, -50%)', 
   }
 };
