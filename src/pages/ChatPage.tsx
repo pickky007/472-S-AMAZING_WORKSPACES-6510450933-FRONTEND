@@ -29,6 +29,10 @@ export const ChatPage: React.FC<ChatPageProps> = ({ workspace, user }) => {
         }
     };
 
+    useEffect(() => {
+        fetchMessages();
+    }, [workspace.id])
+
     const handleSearchMessages = async () => {
         try {
             if (!searchQuery.trim()) {
