@@ -27,5 +27,5 @@ jobs:
 
           IMAGE_NAME="${{ secrets.DOCKER_USERNAME }}/${{ env.APP_NAME }}:${IMAGE_TAG}"
 
-          docker build -t docker/prod.Dockerfile "${IMAGE_NAME}" .
+          docker build -t "${IMAGE_NAME}" .
           docker push "${IMAGE_NAME}"
