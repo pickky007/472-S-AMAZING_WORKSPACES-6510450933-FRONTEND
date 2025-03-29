@@ -1,10 +1,10 @@
+// src/pages/Home.tsx
 import { Button } from '@mui/material';
 import { WorkSpaceCard } from '../components/WorkSpaceCard';
 import Modal from '../components/Modal';
 import React, { useEffect, useRef, useState } from 'react';
-import { User } from '../models/User';
 import { Workspace } from '../models/Workspace';
-import { Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { WorkspaceService } from '../services/workspaceService';
 import { IWorkspaceCreate } from '../types/workspace.types';
 import { IUserLogin } from '../types/user.types';
@@ -12,15 +12,16 @@ import { IUserLogin } from '../types/user.types';
 interface WorkspacePageProps {
   setWorkspaceTo: (workspaceTo: Workspace) => void;
   user: IUserLogin;
+  setShowHiddenMenu: (show: boolean) => void; // เพิ่ม props นี้
 }
 
-export function Home({ setWorkspaceTo, user }: WorkspacePageProps) {
+
+export function Home({ setWorkspaceTo, user, setShowHiddenMenu }: WorkspacePageProps) {
   const navigate = useNavigate();
   const [workspaces, setWorkspace] = useState<Workspace[]>([]);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isJoinModalOpen, setIsJoinModalOpen] = useState<boolean>(false);
-
   const workspaceName = useRef<HTMLInputElement>(null);
   const workspaceCode = useRef<HTMLInputElement>(null);
   const workspaceDescription = useRef<HTMLInputElement>(null);
@@ -75,7 +76,8 @@ export function Home({ setWorkspaceTo, user }: WorkspacePageProps) {
 
   function handleToCard(workspaceTo: Workspace) {
     setWorkspaceTo(workspaceTo);
-    navigate('/kanbanboard', { state: { workspaceTo } });
+    setShowHiddenMenu(true); // เมื่อคลิก workspace ให้เปลี่ยนแปลง showHiddenMenu เป็น true
+    navigate("/kanbanboard", { state: { workspaceTo } });
   }
 
   return (
@@ -116,9 +118,7 @@ export function Home({ setWorkspaceTo, user }: WorkspacePageProps) {
               projectName={workspace.name}
               description={workspace.description || 'No description available'}
               ownerName={workspace.owner}
-              onClick={() => {
-                handleToCard(workspace);
-              }}
+              onClick={() => handleToCard(workspace)} // เปลี่ยนแปลงเมื่อคลิก
               id={workspace.id}
             />
           ))

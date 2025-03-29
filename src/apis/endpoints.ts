@@ -1,3 +1,5 @@
+import { Workspace } from "../models/Workspace";
+
 export const ENDPOINTS = {
   USER: {
     GET: (id: number) => `/users/${id}`,
@@ -18,8 +20,13 @@ export const ENDPOINTS = {
     JOIN: (username: string, workspace_id: string) => `/users/${username}/workspaces/${workspace_id}/join`,
     CREATE_SECTION: (workspace_id: string) => `/workspaces/${workspace_id}/sections/create`,
     CREATE_ACTIVITY: (workspace_id: string, section_id: number, owner: string) => `/workspaces/${workspace_id}/${section_id}/activities/create/${owner}`,
+    GET_ALL_ACTIVITY:(workspace_id: string)=>`/workspaces/${workspace_id}/activities`,
     MOVE_ACTIVITY: (workspace_id: string) => `/workspaces/${workspace_id}/activities/move`,
     EDIT_ACTIVITY: (workspace_id: string, section_id: number, activity_id: number) => `/workspaces/${workspace_id}/${section_id}/activities/${activity_id}/edit`,
     EDIT_SECTION: (workspace_id: string, section_id: number) => `/workspaces/${workspace_id}/${section_id}/edit`,
+    SEND_MESSAGE: () => `/messages`,
+    GET_MESSAGES: (workspace_id: string) => `/messages/${workspace_id}`,
+    DELETE_MESSAGE: () => '/message/delete',
+    SEARCH_MESSAGES: (workspace_id: string, query: string, regex: boolean = false) => `/messages/${workspace_id}/search?query=${query}&regex=${regex}`,
   },
 };

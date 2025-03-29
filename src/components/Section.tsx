@@ -4,7 +4,7 @@ import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { ActivityCard } from "./ActivityCard";
-import { Section as SectionType, Activity } from "./types";
+import { ISectionCard as SectionType, IActivityCard as Activity } from "./types";
 
 interface SectionProps {
   section: SectionType;

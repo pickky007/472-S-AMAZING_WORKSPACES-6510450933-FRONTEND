@@ -8,6 +8,8 @@ export interface IActivityCard {
   owner: string;
   date: string;
   sectionId: string;
+  startDate: Date;
+  endDate: Date;
 }
 
 export interface ISectionCard {
